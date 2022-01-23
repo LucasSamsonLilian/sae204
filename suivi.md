@@ -1,7 +1,8 @@
 Première séance: 
 
-  -Schott Lilian: début v1 du script sql et jeu de test (2h)
+  -Schott Lilian:  Réflexion sujet (15 min) création compte gmail pour la sae (15 min) script sql (1h30) 
+
   
-  -Dupuy Samson: MCD (2h)
+  -Dupuy Samson: Réflexion sujet (15 min) hébergement pythonanywhere (15 min) MCD (1h30) 
   
-  -Ferry Lucas: début de la structure Flask (2h)
+  -Ferry Lucas: Réflexion sujet (15 min) Création github (15 min) rédaction des livrables (30 min) début structure flask (1h)
