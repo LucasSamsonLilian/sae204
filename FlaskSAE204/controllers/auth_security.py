@@ -22,7 +22,7 @@ def auth_login_post():
     username = request.form.get('username')
     password = request.form.get('password')
     tuple_select = (username)
-    sql = '''requete1'''
+    sql = '''SELECT * FROM userC WHERE username = %s AND password = %s'''
     retour = mycursor.execute(sql, (username))
     user = mycursor.fetchone()
     if user:
@@ -55,7 +55,7 @@ def auth_signup_post():
     username = request.form.get('username')
     password = request.form.get('password')
     tuple_select = (username, email)
-    sql = '''requete2'''
+    sql = '''SELECT * FROM userC WHERE email = %s OR username % %s'''
     retour = mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
@@ -65,10 +65,10 @@ def auth_signup_post():
     # ajouter un nouveau user
     password = generate_password_hash(password, method='sha256')
     tuple_insert = (username, email, password, 'ROLE_client')
-    sql = '''requete3'''
+    sql = '''INSERT INTO userC(username,email,password,role) VALUES (%s,%s,%s,%s)'''
     mycursor.execute(sql, tuple_insert)
     get_db().commit()                    # position de cette ligne discutatble !
-    sql='''requete4'''
+    sql='''SELECT last_insert_id() AS last_insert_id;'''
     mycursor.execute(sql)
     info_last_id = mycursor.fetchone()
     user_id = info_last_id['last_insert_id']
