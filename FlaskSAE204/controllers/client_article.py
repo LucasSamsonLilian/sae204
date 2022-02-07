@@ -3,7 +3,7 @@
 from flask import Blueprint
 from flask import render_template
 
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 client_article = Blueprint('client_article', __name__,
                         template_folder='templates')

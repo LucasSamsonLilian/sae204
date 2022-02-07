@@ -3,7 +3,7 @@
 from flask import Blueprint
 from flask import request, redirect
 
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 client_commentaire = Blueprint('client_commentaire', __name__,
                         template_folder='templates')

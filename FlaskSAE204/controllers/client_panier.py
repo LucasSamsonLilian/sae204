@@ -3,7 +3,7 @@
 from flask import Blueprint
 from flask import request, redirect, session
 
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')

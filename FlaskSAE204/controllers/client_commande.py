@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import render_template, redirect, flash
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 client_commande = Blueprint('client_commande', __name__,
                         template_folder='templates')

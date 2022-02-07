@@ -5,7 +5,7 @@ from flask import Blueprint
 from flask import request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 auth_security = Blueprint('auth_security', __name__,
                         template_folder='templates')
@@ -21,9 +21,9 @@ def auth_login_post():
     mycursor = get_db().cursor()
     username = request.form.get('username')
     password = request.form.get('password')
-    tuple_select = (username)
+    tuple_select = (username,password)
     sql = '''SELECT * FROM userC WHERE username = %s AND password = %s'''
-    retour = mycursor.execute(sql, (username))
+    retour = mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
         mdp_ok = check_password_hash(user['password'], password)

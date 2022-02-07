@@ -3,7 +3,7 @@
 from flask import Blueprint
 from flask import request, render_template, redirect, url_for, flash
 
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 admin_article = Blueprint('admin_article', __name__,
                         template_folder='templates')

@@ -3,7 +3,7 @@
 from flask import Blueprint
 from flask import render_template, redirect
 
-from FlaskSAE204.connexion_db import get_db
+from connexion_db import get_db
 
 admin_commande = Blueprint('admin_commande', __name__,
                         template_folder='templates')
