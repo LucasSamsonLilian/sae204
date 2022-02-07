@@ -1,9 +1,9 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
+from flask import request, redirect, session
 
-from connexion_db import get_db
+from FlaskSAE204.connexion_db import get_db
 
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')

@@ -1,9 +1,9 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
+from flask import request, redirect
 
-from connexion_db import get_db
+from FlaskSAE204.connexion_db import get_db
 
 client_commentaire = Blueprint('client_commentaire', __name__,
                         template_folder='templates')

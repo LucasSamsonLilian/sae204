@@ -2,10 +2,10 @@
 # -*- coding:utf-8 -*-
 
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
+from flask import request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from connexion_db import get_db
+from FlaskSAE204.connexion_db import get_db
 
 auth_security = Blueprint('auth_security', __name__,
                         template_folder='templates')

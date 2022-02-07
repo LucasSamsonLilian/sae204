@@ -1,9 +1,9 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
+from flask import render_template, redirect
 
-from connexion_db import get_db
+from FlaskSAE204.connexion_db import get_db
 
 admin_commande = Blueprint('admin_commande', __name__,
                         template_folder='templates')
