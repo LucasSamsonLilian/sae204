@@ -21,8 +21,8 @@ def auth_login_post():
     mycursor = get_db().cursor()
     username = request.form.get('username')
     password = request.form.get('password')
-    tuple_select = (username,password)
-    sql = '''SELECT * FROM userC WHERE username = %s AND password = %s'''
+    tuple_select = (username,)
+    sql = '''SELECT * FROM userC WHERE username = %s'''
     retour = mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
@@ -55,7 +55,7 @@ def auth_signup_post():
     username = request.form.get('username')
     password = request.form.get('password')
     tuple_select = (username, email)
-    sql = '''SELECT * FROM userC WHERE email = %s OR username % %s'''
+    sql = '''SELECT * FROM userC WHERE email = %s OR username = %s'''
     retour = mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:

@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS  couleur;
 DROP TABLE IF EXISTS  marque;
 
 CREATE TABLE IF NOT EXISTS caracteristique(
-   id_caracteristique INT,
+   id_caracteristique INT AUTO_INCREMENT,
    stockage DOUBLE,
    RAM INT,
    PRIMARY KEY(id_caracteristique)
@@ -45,17 +45,17 @@ CREATE TABLE IF NOT EXISTS ville(
 );
 
 CREATE TABLE IF NOT EXISTS userC(
-   idUser INT NOT NULL,
-   username VARCHAR(50),
-   password VARCHAR(50),
-   role VARCHAR(50),
-   estActif BOOLEAN,
+   idUser INT AUTO_INCREMENT,
    email VARCHAR(50),
+   username VARCHAR(50),
+   password VARCHAR(250),
+   role VARCHAR(50),
+   est_actif BOOLEAN,
    PRIMARY KEY(idUser)
 );
 
 CREATE TABLE IF NOT EXISTS etat(
-   idEtat INT,
+   idEtat INT AUTO_INCREMENT,
    libelle VARCHAR(50),
    idUser INT NOT NULL,
    PRIMARY KEY(idEtat),
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS etat(
 );
 
 CREATE TABLE IF NOT EXISTS Telephone(
-   id_telephone VARCHAR(50),
+   id_telephone INT AUTO_INCREMENT,
    modele CHAR(50),
    categorie CHAR(50),
    date_sortie DATE,
@@ -89,11 +89,11 @@ CREATE TABLE IF NOT EXISTS Telephone(
 );
 
 CREATE TABLE IF NOT EXISTS panier(
-   idPanier INT,
+   idPanier INT AUTO_INCREMENT,
    date_ajout DATE,
    prix_unit INT,
    quantite INT,
-   id_telephone VARCHAR(50) NOT NULL,
+   id_telephone INT,
    idUser INT NOT NULL,
    PRIMARY KEY(idPanier),
    UNIQUE(id_telephone),
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS panier(
 );
 
 CREATE TABLE IF NOT EXISTS commande(
-   idCommande INT,
+   idCommande INT AUTO_INCREMENT,
    date_achat DATE,
    idPanier INT NOT NULL,
    PRIMARY KEY(idCommande),
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS commande(
 );
 
 CREATE TABLE IF NOT EXISTS ligneCommande(
-   idLigneCommande INT,
+   idLigneCommande INT AUTO_INCREMENT,
    prix_unit INT,
    quantite INT,
    idCommande INT NOT NULL,
@@ -132,3 +132,10 @@ CREATE TABLE IF NOT EXISTS seSitue(
    CONSTRAINT fk_seSitue_ville
    FOREIGN KEY(code_ville) REFERENCES ville(code_ville)
 );
+
+INSERT INTO userC (idUser, email, username, password, role,  est_actif) VALUES
+(NULL, 'admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1);
+INSERT INTO userC  (idUser, email, username, password, role, est_actif) VALUES
+(NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1);
+INSERT INTO userC  (idUser, email, username, password, role,  est_actif) VALUES
+(NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1);

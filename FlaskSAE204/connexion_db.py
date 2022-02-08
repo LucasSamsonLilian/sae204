@@ -10,7 +10,7 @@ def get_db():
             # host="serveurmysql",
             user="lferry5",
             password="1712",
-            database="BDD_lferry5",
+            database="BDD_sae204",
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
