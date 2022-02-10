@@ -7,21 +7,27 @@ DROP TABLE IF EXISTS  Telephone;
 DROP TABLE IF EXISTS  seSitue;
 DROP TABLE IF EXISTS  ville;
 DROP TABLE IF EXISTS  fournisseur;
-DROP TABLE IF EXISTS  caracteristique;
+DROP TABLE IF EXISTS  stockage;
+DROP TABLE IF EXISTS ram;
+DROP TABLE IF EXISTS caracteristique;
 DROP TABLE IF EXISTS  couleur;
 DROP TABLE IF EXISTS  marque;
 
-CREATE TABLE IF NOT EXISTS caracteristique(
-   id_caracteristique INT AUTO_INCREMENT,
-   stockage DOUBLE,
-   RAM INT,
-   PRIMARY KEY(id_caracteristique)
+CREATE TABLE IF NOT EXISTS stockage(
+   id_stockage INT AUTO_INCREMENT,
+   stockage int,
+   PRIMARY KEY(id_stockage)
+);
+
+CREATE TABLE IF NOT EXISTS ram(
+   id_ram INT AUTO_INCREMENT,
+   ram int,
+   PRIMARY KEY(id_ram)
 );
 
 CREATE TABLE IF NOT EXISTS couleur(
    code_couleur INT,
    nom_couleur CHAR(50),
-   image_couleur VARCHAR(50),
    PRIMARY KEY(code_couleur)
 );
 
@@ -72,7 +78,8 @@ CREATE TABLE IF NOT EXISTS Telephone(
    prix DOUBLE,
    image_telephone VARCHAR(50),
    code_fournisseur INT NOT NULL,
-   id_caracteristique INT NOT NULL,
+   stockageTel INT NOT NULL,
+   ramTel INT NOT NULL,
    code_couleur INT NOT NULL,
    code_marque INT NOT NULL,
    poids DOUBLE,
@@ -80,8 +87,10 @@ CREATE TABLE IF NOT EXISTS Telephone(
    PRIMARY KEY(id_telephone),
    CONSTRAINT fk_Telephone_fournisseur
    FOREIGN KEY(code_fournisseur) REFERENCES fournisseur(code_fournisseur),
-   CONSTRAINT fk_Telephone_caracteristique
-   FOREIGN KEY(id_caracteristique) REFERENCES caracteristique(id_caracteristique),
+   CONSTRAINT fk_Telephone_stockage
+   FOREIGN KEY(stockageTel) REFERENCES stockage(id_stockage),
+   CONSTRAINT fk_Telephone_ram
+   FOREIGN KEY(ramTel) REFERENCES ram(id_ram),
    CONSTRAINT fk_Telehpone_couleur
    FOREIGN KEY(code_couleur) REFERENCES couleur(code_couleur),
    CONSTRAINT fk_Telephone_marque
