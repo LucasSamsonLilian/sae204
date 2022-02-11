@@ -9,7 +9,6 @@ DROP TABLE IF EXISTS  ville;
 DROP TABLE IF EXISTS  fournisseur;
 DROP TABLE IF EXISTS  stockage;
 DROP TABLE IF EXISTS ram;
-DROP TABLE IF EXISTS caracteristique;
 DROP TABLE IF EXISTS  couleur;
 DROP TABLE IF EXISTS  marque;
 
@@ -57,6 +56,7 @@ CREATE TABLE IF NOT EXISTS userC(
    password VARCHAR(250),
    role VARCHAR(50),
    est_actif BOOLEAN,
+   adresse VARCHAR(50),
    PRIMARY KEY(idUser)
 );
 
@@ -77,13 +77,13 @@ CREATE TABLE IF NOT EXISTS Telephone(
    date_sortie DATE,
    prix DOUBLE,
    image_telephone VARCHAR(50),
-   code_fournisseur INT NOT NULL,
-   stockageTel INT NOT NULL,
-   ramTel INT NOT NULL,
-   code_couleur INT NOT NULL,
-   code_marque INT NOT NULL,
    poids DOUBLE,
    taille_ecran DOUBLE,
+   ramTel INT NOT NULL,
+   stockageTel INT NOT NULL,
+   code_fournisseur INT NOT NULL,
+   code_couleur INT NOT NULL,
+   code_marque INT NOT NULL,
    PRIMARY KEY(id_telephone),
    CONSTRAINT fk_Telephone_fournisseur
    FOREIGN KEY(code_fournisseur) REFERENCES fournisseur(code_fournisseur),
@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS commande(
    idCommande INT AUTO_INCREMENT,
    date_achat DATE,
    idPanier INT NOT NULL,
+   etat_expedition BOOLEAN,
    PRIMARY KEY(idCommande),
    CONSTRAINT fk_commande_panier
    FOREIGN KEY(idPanier) REFERENCES panier(idPanier)
