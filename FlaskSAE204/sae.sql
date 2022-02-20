@@ -5,8 +5,8 @@ DROP TABLE IF EXISTS  etat;
 DROP TABLE IF EXISTS  userC;
 DROP TABLE IF EXISTS  Telephone;
 DROP TABLE IF EXISTS  seSitue;
-DROP TABLE IF EXISTS  ville;
 DROP TABLE IF EXISTS  fournisseur;
+DROP TABLE IF EXISTS  ville;
 DROP TABLE IF EXISTS  stockage;
 DROP TABLE IF EXISTS ram;
 DROP TABLE IF EXISTS  couleur;
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS ram(
 );
 
 CREATE TABLE IF NOT EXISTS couleur(
-   code_couleur INT,
+   code_couleur INT AUTO_INCREMENT,
    nom_couleur CHAR(50),
    PRIMARY KEY(code_couleur)
 );
@@ -36,17 +36,17 @@ CREATE TABLE IF NOT EXISTS marque(
    PRIMARY KEY(code_marque)
 );
 
+CREATE TABLE IF NOT EXISTS ville(
+   code_ville INT AUTO_INCREMENT,
+   nom_ville CHAR(50),
+   PRIMARY KEY(code_ville)
+);
+
 CREATE TABLE IF NOT EXISTS fournisseur(
-   code_fournisseur INT,
+   code_fournisseur INT AUTO_INCREMENT,
    nom_fournisseur CHAR(50),
    adresse VARCHAR(50),
    PRIMARY KEY(code_fournisseur)
-);
-
-CREATE TABLE IF NOT EXISTS ville(
-   code_ville INT,
-   nom_ville CHAR(50),
-   PRIMARY KEY(code_ville)
 );
 
 CREATE TABLE IF NOT EXISTS userC(
@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS Telephone(
    code_fournisseur INT NOT NULL,
    code_couleur INT NOT NULL,
    code_marque INT NOT NULL,
+   stock INT,
    PRIMARY KEY(id_telephone),
    CONSTRAINT fk_Telephone_fournisseur
    FOREIGN KEY(code_fournisseur) REFERENCES fournisseur(code_fournisseur),
@@ -99,14 +100,13 @@ CREATE TABLE IF NOT EXISTS Telephone(
 
 CREATE TABLE IF NOT EXISTS panier(
    idPanier INT AUTO_INCREMENT,
-   date_ajout DATE,
-   prix_unit INT,
+   date_ajout DATE  ,
+   prix_unit DOUBLE,
    quantite INT,
    id_telephone INT,
    idUser INT NOT NULL,
+   nom CHAR(50),
    PRIMARY KEY(idPanier),
-   UNIQUE(id_telephone),
-   UNIQUE(idUser),
    CONSTRAINT fk_panier_Telephone
    FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone),
    CONSTRAINT fk_panier_userC
@@ -149,3 +149,12 @@ INSERT INTO userC  (idUser, email, username, password, role, est_actif) VALUES
 (NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1);
 INSERT INTO userC  (idUser, email, username, password, role,  est_actif) VALUES
 (NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1);
+
+
+LOAD DATA LOCAL INFILE 'Data/stockage.csv' INTO TABLE stockage FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/ram.csv' INTO TABLE ram FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/couleur.csv' INTO TABLE couleur FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/marque.csv' INTO TABLE marque FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/ville.csv' INTO TABLE ville FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/fournisseur.csv' INTO TABLE fournisseur FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/telephone.csv' INTO TABLE Telephone FIELDS TERMINATED BY ',';

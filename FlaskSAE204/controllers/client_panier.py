@@ -13,12 +13,59 @@ client_panier = Blueprint('client_panier', __name__,
 def client_panier_add():
     mycursor = get_db().cursor()
 
+    client_id = session['user_id']
+    id_article = request.form.get('idArticle')
+    quantite = request.form.get('quantite')
+
+    sql = "SELECT * FROM panier WHERE id_telephone = %s AND idUser=%s"
+    mycursor.execute(sql, (id_article, client_id))
+    article_panier = mycursor.fetchone()
+
+    mycursor.execute("SELECT telephone.prix FROM Telephone WHERE id_telephone = %s", (id_article))
+    prix = mycursor.fetchone()
+
+    mycursor.execute("SELECT telephone.modele FROM Telephone WHERE id_telephone = %s", (id_article))
+    nom = mycursor.fetchone()
+
+    print(nom)
+
+    if not (article_panier is None) and article_panier['quantite'] >= 1:
+        tuple_update = (quantite, client_id, id_article)
+        sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
+        mycursor.execute(sql, tuple_update)
+    else:
+        tuple_insert = ('2000-01-01', prix['prix'],quantite,id_article,client_id,nom['modele'] )
+        sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
+        mycursor.execute(sql, tuple_insert)
+
+    get_db().commit()
+
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
 @client_panier.route('/client/panier/delete', methods=['POST'])
 def client_panier_delete():
     mycursor = get_db().cursor()
+    client_id = session['user_id']
+    idPanier = request.form.get('idPanier')
+
+    mycursor.execute("SELECT panier.quantite FROM panier WHERE idPanier = %s", (idPanier))
+    qte = mycursor.fetchone()
+
+
+
+    if qte['quantite'] > 1:
+        tuple_update = (1, client_id, idPanier)
+        sql = "UPDATE panier SET quantite = quantite-%s WHERE idUser = %s AND idPanier=%s"
+        mycursor.execute(sql, tuple_update)
+    if(qte['quantite']==1):
+        tuple_delete = (client_id, idPanier)
+        sql = "DELETE FROM panier WHERE idUser=%s AND idPanier=%s"
+        mycursor.execute(sql, tuple_delete)
+
+    get_db().commit()
+
+
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
@@ -27,6 +74,13 @@ def client_panier_delete():
 @client_panier.route('/client/panier/vider', methods=['POST'])
 def client_panier_vider():
     mycursor = get_db().cursor()
+    client_id = session['user_id']
+
+    tuple_deleteAll=(client_id)
+    sql = "DELETE FROM panier WHERE idUser=%s"
+    mycursor.execute(sql, tuple_deleteAll)
+
+    get_db().commit()
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
@@ -35,6 +89,15 @@ def client_panier_vider():
 @client_panier.route('/client/panier/delete/line', methods=['POST'])
 def client_panier_delete_line():
     mycursor = get_db().cursor()
+    client_id = session['user_id']
+    idPanier = request.form.get('idPanier')
+
+    tuple_delete = (client_id, idPanier)
+
+    sql = "DELETE FROM panier WHERE idUser=%s AND idPanier=%s"
+    mycursor.execute(sql, tuple_delete)
+
+    get_db().commit()
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
