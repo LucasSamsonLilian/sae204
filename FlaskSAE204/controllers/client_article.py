@@ -44,12 +44,17 @@ def client_article_show():                                 # remplace client_ind
 def client_article_details(id):
     mycursor = get_db().cursor()
     commentaires=None
-    commandes_articles=None
 
     sql = "SELECT * FROM Telephone WHERE id_telephone=%s"
     mycursor.execute(sql, id)
-    telephone = mycursor.fetchall()
+    telephone = mycursor.fetchone()
     article = telephone
 
+    mycursor.execute("SELECT panier.idPanier FROM panier WHERE idUser=%s", (id))
+    idPanier = mycursor.fetchone()
+
+    sql = "SELECT * FROM commande WHERE idPanier=%s"
+    mycursor.execute(sql, idPanier)
+    commandes_articles = mycursor.fetchall()
 
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)
