@@ -1,3 +1,4 @@
+SET GLOBAL local_infile=1;
 DROP TABLE IF EXISTS  ligneCommande;
 DROP TABLE IF EXISTS  commande;
 DROP TABLE IF EXISTS  panier;

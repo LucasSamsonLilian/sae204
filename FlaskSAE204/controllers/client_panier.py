@@ -4,6 +4,7 @@ from flask import Blueprint
 from flask import request, redirect, session
 
 from connexion_db import get_db
+import datetime
 
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')
@@ -27,14 +28,15 @@ def client_panier_add():
     mycursor.execute("SELECT telephone.modele FROM Telephone WHERE id_telephone = %s", (id_article))
     nom = mycursor.fetchone()
 
-    print(nom)
+    date=datetime.datetime.now()
+
 
     if not (article_panier is None) and article_panier['quantite'] >= 1:
         tuple_update = (quantite, client_id, id_article)
         sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
         mycursor.execute(sql, tuple_update)
     else:
-        tuple_insert = ('2000-01-01', prix['prix'],quantite,id_article,client_id,nom['modele'] )
+        tuple_insert = (date, prix['prix'],quantite,id_article,client_id,nom['modele'] )
         sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
         mycursor.execute(sql, tuple_insert)
 
