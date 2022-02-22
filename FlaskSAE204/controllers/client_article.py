@@ -24,6 +24,7 @@ def client_article_show():                                 # remplace client_ind
     mycursor.execute(sql, client_id)
     panier = mycursor.fetchall()
     articles_panier = panier
+    print (panier)
 
     sql="SELECT SUM(panier.prix_unit * panier.quantite) as total FROM panier WHERE idUser=%s"
     mycursor.execute(sql, client_id)

@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS  commande;
 DROP TABLE IF EXISTS  panier;
 DROP TABLE IF EXISTS  etat;
 DROP TABLE IF EXISTS  userC;
-DROP TABLE IF EXISTS  Telephone;
+DROP TABLE IF EXISTS  telephone;
 DROP TABLE IF EXISTS  seSitue;
 DROP TABLE IF EXISTS  fournisseur;
 DROP TABLE IF EXISTS  ville;
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS couleur(
 
 CREATE TABLE IF NOT EXISTS marque(
    code_marque INT,
-   nom_marque CHAR(50),
+   nom_marque VARCHAR(50),
    PRIMARY KEY(code_marque)
 );
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS etat(
    FOREIGN KEY(idUser) REFERENCES userC(idUser)
 );
 
-CREATE TABLE IF NOT EXISTS Telephone(
+CREATE TABLE IF NOT EXISTS telephone(
    id_telephone INT AUTO_INCREMENT,
    modele CHAR(50),
    categorie CHAR(50),
@@ -159,4 +159,4 @@ LOAD DATA LOCAL INFILE 'Data/couleur.csv' INTO TABLE couleur FIELDS TERMINATED B
 LOAD DATA LOCAL INFILE 'Data/marque.csv' INTO TABLE marque FIELDS TERMINATED BY ',';
 LOAD DATA LOCAL INFILE 'Data/ville.csv' INTO TABLE ville FIELDS TERMINATED BY ',';
 LOAD DATA LOCAL INFILE 'Data/fournisseur.csv' INTO TABLE fournisseur FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/telephone.csv' INTO TABLE Telephone FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'Data/telephone.csv' INTO TABLE telephone FIELDS TERMINATED BY ',';
