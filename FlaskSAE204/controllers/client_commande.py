@@ -28,6 +28,6 @@ def client_commande_add():
 def client_commande_show():
     mycursor = get_db().cursor()
     commandes = None  #commande
-    articles_commande = None  # lignecommande
+    articles_commande = None  # lignecommandee
     return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
 
