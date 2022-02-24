@@ -63,14 +63,12 @@ CREATE TABLE IF NOT EXISTS userC(
 );
 
 CREATE TABLE IF NOT EXISTS etat(
-   idEtat INT AUTO_INCREMENT,
+   idEtat INT NOT NULL AUTO_INCREMENT,
    libelle VARCHAR(50),
-   idUser INT NOT NULL,
-   PRIMARY KEY(idEtat),
-   UNIQUE(idUser),
-   CONSTRAINT fk_etat_userC
-   FOREIGN KEY(idUser) REFERENCES userC(idUser)
+    PRIMARY KEY (idEtat)
 );
+
+INSERT INTO etat(libelle) VALUES ('en cours de traitement'),('expédié'),('validé');
 
 CREATE TABLE IF NOT EXISTS telephone(
    id_telephone INT AUTO_INCREMENT,
@@ -116,23 +114,24 @@ CREATE TABLE IF NOT EXISTS panier(
 );
 
 CREATE TABLE IF NOT EXISTS commande(
-   idCommande INT AUTO_INCREMENT,
+   idCommande INT NOT NULL AUTO_INCREMENT,
    date_achat DATE,
-   idPanier INT NOT NULL,
-   etat_expedition BOOLEAN,
+   idUser INT,
+   idEtat INT,
    PRIMARY KEY(idCommande),
-   CONSTRAINT fk_commande_panier
-   FOREIGN KEY(idPanier) REFERENCES panier(idPanier)
+   CONSTRAINT commande_ibfk_1 FOREIGN KEY(idUser) REFERENCES userC(idUser),
+   CONSTRAINT commande_ibfk_2 FOREIGN KEY(idEtat) REFERENCES etat(idEtat)
 );
 
 CREATE TABLE IF NOT EXISTS ligneCommande(
    idLigneCommande INT AUTO_INCREMENT,
-   prix_unit INT,
+   commande_id INT,
+   telephone_id INT,
+   prix decimal(10,2),
    quantite INT,
-   idCommande INT NOT NULL,
    PRIMARY KEY(idLigneCommande),
-   CONSTRAINT fk_ligneCommande_commande
-   FOREIGN KEY(idCommande) REFERENCES commande(idCommande)
+   CONSTRAINT ligneCommande_ibfk1 FOREIGN KEY(commande_id) REFERENCES commande(idCommande),
+   CONSTRAINT ligneCommande_ibfk2 FOREIGN KEY(telephone_id) REFERENCES telephone(id_telephone)
 );
 
 CREATE TABLE IF NOT EXISTS seSitue(
