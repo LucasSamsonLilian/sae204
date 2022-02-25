@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, abort, fla
 
 import pymysql.cursors
 
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:

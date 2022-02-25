@@ -56,6 +56,23 @@ def client_commande_show():
     sql = '''SELECT * FROM commande WHERE idUser = %s'''
     mycursor.execute(sql,client_id)
     commandes = mycursor.fetchall()
+    for commande in commandes:
+        tuple_select = (commande['idCommande'])
+        sql = '''SELECT SUM(quantite) AS nbr FROM ligneCommande WHERE commande_id = %s '''
+        mycursor.execute(sql,tuple_select)
+        retour = mycursor.fetchone()
+        commande['nbr_articles'] = retour.get("nbr")
+
+        sql = '''SELECT SUM(quantite*prix) AS prix FROM ligneCommande WHERE commande_id = %s '''
+        mycursor.execute(sql, tuple_select)
+        retour = mycursor.fetchone()
+        commande['prix_total'] = retour.get("prix")
+
+        tuple_select = (commande['idEtat'])
+        sql = '''SELECT libelle FROM etat WHERE idEtat = %s'''
+        mycursor.execute(sql, tuple_select)
+        retour = mycursor.fetchone()
+        commande['libelle'] = retour.get("libelle")
 
     sql = '''SELECT last_insert_id() as last_insert_id'''
     mycursor.execute(sql)

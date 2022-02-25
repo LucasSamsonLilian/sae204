@@ -41,16 +41,17 @@
                         {% for commande in commandes %}
                             <tr id="" {#% if commande.etat.nom == "Produit indisponible" %#} style="background: #FFD600; font-weight: bold;" {#% endif %#}>
                                 <td>{{ commande.date_achat.strftime('%d-%m-%Y') }}</td>
-                                <td> nombre d'article </td>
+                                <td> {{ commande.nbr_articles }} </td>
                                 <td>
-                                    {# {{ "{:,.2f} €".format(commande.prix_total) }} #} prix totale
+                                    {{ commande.prix_total }}
                                 </td>
                                 <td style="text-align: center;">
                                     {% if commande.idEtat == 1 %} <div style="background-color: #ba8b00; padding: 5px;">
-                                     commande.libelle
+                                     {{ commande.libelle }}
                                     </div>
                                     {% else %} <div style="background-color: #34ce57; padding: 5px;">
-                                        commande.libelle  </div>
+                                        {{ commande.libelle }}
+                                    </div>
                                     {% endif %}
                                 </td>
                                 <td style="text-align: center;">
