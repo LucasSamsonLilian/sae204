@@ -4,11 +4,11 @@ def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = pymysql.connect(
-            host="FerryDupuySchott.mysql.pythonanywhere-services.com",
+            host="localhost",
             # host="serveurmysql",
-            user="FerryDupuySchott",
-            password="Sae_204mgl",
-            database="FerryDupuySchott$BDD_sae204",
+            user="lferry5",
+            password="1712",
+            database="BDD_sae204",
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
