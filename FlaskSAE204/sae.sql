@@ -20,11 +20,16 @@ CREATE TABLE IF NOT EXISTS stockage(
    PRIMARY KEY(id_stockage)
 );
 
+INSERT INTO stockage VALUES (1,0),(2,16),(3,32),(4,64),(5,128),(6,256),(7,512);
+
 CREATE TABLE IF NOT EXISTS ram(
    id_ram INT AUTO_INCREMENT,
    ram int,
    PRIMARY KEY(id_ram)
 );
+
+INSERT INTO ram VALUES (1,0),(2,2),(3,4),(4,8),(5,12),(6,16);
+
 
 CREATE TABLE IF NOT EXISTS couleur(
    code_couleur INT AUTO_INCREMENT,
@@ -32,11 +37,17 @@ CREATE TABLE IF NOT EXISTS couleur(
    PRIMARY KEY(code_couleur)
 );
 
+INSERT INTO couleur VALUES (1,'Acajou'),(2,'Amande'),(3,'Argent'),(4,'Blanc'),(5,'noir'),(6,'Zinzolin');
+
+
 CREATE TABLE IF NOT EXISTS marque(
    code_marque INT,
    nom_marque VARCHAR(50),
    PRIMARY KEY(code_marque)
 );
+
+INSERT INTO marque VALUES (1,'Apple'),(2,'Samsung'),(3,'Xiaomi'),(4,'Oppo'),(5,'LG'),(6,'Huawei'),(3310,'Nokia');
+
 
 CREATE TABLE IF NOT EXISTS ville(
    code_ville INT AUTO_INCREMENT,
@@ -44,12 +55,18 @@ CREATE TABLE IF NOT EXISTS ville(
    PRIMARY KEY(code_ville)
 );
 
+INSERT INTO ville VALUES (1,'Le Caire'),(2,'Gizeh'),(3,'Alexandrie'),(4,'Suez'),(5,'Louxor'),(6,'Mansourah'),(7,'Tanta');
+
+
 CREATE TABLE IF NOT EXISTS fournisseur(
    code_fournisseur INT AUTO_INCREMENT,
    nom_fournisseur CHAR(50),
    adresse VARCHAR(50),
    PRIMARY KEY(code_fournisseur)
 );
+
+INSERT INTO fournisseur VALUES (1,'telemago','84 place de Lesage Bourgeoisdan'),(2,'telephonarabe','83 place Odette Legendre Humbertboeuf'),(3,'telemagouille','17 boulevard de Roger Antoine'),(4,'telemacron','39 chemin de Lebon Coulonnec'),(5,'teleferry','45 place Jean Maillot Boulanger');
+
 
 CREATE TABLE IF NOT EXISTS userC(
    idUser INT AUTO_INCREMENT,
@@ -97,6 +114,9 @@ CREATE TABLE IF NOT EXISTS telephone(
    CONSTRAINT fk_Telephone_marque
    FOREIGN KEY(code_marque) REFERENCES marque(code_marque)
 );
+
+INSERT INTO telephone VALUES (1,'P30 Pro','smartphone','2005-04-19',850,'img',192,6.47,4,2,3,2,4,100),(2,'IPhone 13','smartphone','2014-09-21',850,'img',174,6,1,3,2,2,2,100),(3,'IPhone 13 Mini','smartphone','2014-09-21',850,'img',141,5,4,4,2,2,2,100),(4,'Galaxy Z Flip3','smartphone','2027-08-21',1050,'img',183,6,3,5,3,1,5,100),(5,'3310','Bi-bande GSM 900/1800','1998-01-01',65,'img',79,2,4,1,1,2,3310,100);
+
 
 CREATE TABLE IF NOT EXISTS panier(
    idPanier INT AUTO_INCREMENT,
@@ -150,12 +170,3 @@ INSERT INTO userC  (idUser, email, username, password, role, est_actif) VALUES
 (NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1);
 INSERT INTO userC  (idUser, email, username, password, role,  est_actif) VALUES
 (NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1);
-
-
-LOAD DATA LOCAL INFILE 'Data/stockage.csv' INTO TABLE stockage FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/ram.csv' INTO TABLE ram FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/couleur.csv' INTO TABLE couleur FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/marque.csv' INTO TABLE marque FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/ville.csv' INTO TABLE ville FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/fournisseur.csv' INTO TABLE fournisseur FIELDS TERMINATED BY ',';
-LOAD DATA LOCAL INFILE 'Data/telephone.csv' INTO TABLE telephone FIELDS TERMINATED BY ',';
