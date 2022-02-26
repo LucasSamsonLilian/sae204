@@ -33,7 +33,7 @@ def client_article_show():                                 # remplace client_ind
 
 
 
-    sql = "SELECT * FROM Telephone"
+    sql = "SELECT * FROM telephone"
     mycursor.execute(sql)
     telephone = mycursor.fetchall()
     articles = telephone
@@ -46,7 +46,7 @@ def client_article_details(id):
     mycursor = get_db().cursor()
     commentaires=None
 
-    sql = "SELECT * FROM Telephone WHERE id_telephone=%s"
+    sql = "SELECT * FROM telephone WHERE id_telephone=%s"
     mycursor.execute(sql, id)
     telephone = mycursor.fetchone()
     article = telephone

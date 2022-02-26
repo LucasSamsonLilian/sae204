@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS panier(
    nom CHAR(50),
    PRIMARY KEY(idPanier),
    CONSTRAINT fk_panier_Telephone
-   FOREIGN KEY(id_telephone) REFERENCES Telephone(id_telephone),
+   FOREIGN KEY(id_telephone) REFERENCES telephone(id_telephone),
    CONSTRAINT fk_panier_userC
    FOREIGN KEY(idUser) REFERENCES userC(idUser)
 );
