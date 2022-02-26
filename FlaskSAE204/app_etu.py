@@ -29,7 +29,10 @@ def close_connection(exception):
 
 @app.route('/')
 def show_accueil():
-    return render_template('auth/layout.html')
+    if 'username' not in session:
+        return render_template('auth/layout.html')
+    else:
+        return redirect('/client/article/show')
 
 ##################
 # Authentification
@@ -39,7 +42,7 @@ def show_accueil():
 
 @app.before_request
 def before_request():
-     if request.path.startswith('/admin') or request.path.startswith('/client'):
+    if request.path.startswith('/admin') or request.path.startswith('/client'):
         if 'role' not in session:
             return redirect('/login')
             #return redirect(url_for('auth_login'))

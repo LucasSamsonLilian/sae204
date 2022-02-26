@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS etat(
     PRIMARY KEY (idEtat)
 );
 
-INSERT INTO etat(libelle) VALUES ('en cours de traitement'),('expédié'),('validé');
+INSERT INTO etat(libelle) VALUES ('en cours de traitement'),('expedie'),('valide');
 
 CREATE TABLE IF NOT EXISTS telephone(
    id_telephone INT AUTO_INCREMENT,
