@@ -28,17 +28,24 @@ def client_panier_add():
     mycursor.execute("SELECT telephone.modele FROM Telephone WHERE id_telephone = %s", (id_article))
     nom = mycursor.fetchone()
 
+    mycursor.execute("SELECT telephone.stock FROM Telephone WHERE id_telephone = %s", (id_article))
+    stock = mycursor.fetchone()
+
     date=datetime.datetime.now()
 
-
-    if not (article_panier is None) and article_panier['quantite'] >= 1:
-        tuple_update = (quantite, client_id, id_article)
-        sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
-        mycursor.execute(sql, tuple_update)
-    else:
-        tuple_insert = (date, prix['prix'],quantite,id_article,client_id,nom['modele'] )
-        sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
-        mycursor.execute(sql, tuple_insert)
+    if stock['stock']>=1:
+        if not (article_panier is None) and article_panier['quantite'] >= 1:
+            tuple_update_panier = (quantite, client_id, id_article)
+            sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
+            mycursor.execute(sql, tuple_update_panier)
+            mycursor.execute("UPDATE Telephone SET stock=stock-%s  WHERE id_telephone = %s", (quantite,id_article))
+            mycursor.fetchone()
+        else:
+            tuple_insert = (date, prix['prix'],quantite,id_article,client_id,nom['modele'] )
+            sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
+            mycursor.execute(sql, tuple_insert)
+            mycursor.execute("UPDATE Telephone SET stock=stock-%s  WHERE id_telephone = %s", (quantite,id_article))
+            mycursor.fetchone()
 
     get_db().commit()
 
@@ -54,7 +61,8 @@ def client_panier_delete():
     mycursor.execute("SELECT panier.quantite FROM panier WHERE idPanier = %s", (idPanier))
     qte = mycursor.fetchone()
 
-
+    mycursor.execute("SELECT panier.id_telephone FROM panier WHERE idPanier = %s", (idPanier))
+    tele = mycursor.fetchone()
 
     if qte['quantite'] > 1:
         tuple_update = (1, client_id, idPanier)
@@ -64,6 +72,9 @@ def client_panier_delete():
         tuple_delete = (client_id, idPanier)
         sql = "DELETE FROM panier WHERE idUser=%s AND idPanier=%s"
         mycursor.execute(sql, tuple_delete)
+
+    mycursor.execute("UPDATE Telephone SET stock = stock+1 WHERE id_telephone=%s", (tele['id_telephone']))
+    mycursor.fetchone()
 
     get_db().commit()
 
@@ -94,8 +105,18 @@ def client_panier_delete_line():
     client_id = session['user_id']
     idPanier = request.form.get('idPanier')
 
-    tuple_delete = (client_id, idPanier)
 
+
+    mycursor.execute("SELECT panier.id_telephone FROM panier WHERE idPanier = %s", (idPanier))
+    tele = mycursor.fetchone()
+
+    mycursor.execute("SELECT panier.quantite FROM panier WHERE idPanier = %s", (idPanier))
+    qte = mycursor.fetchone()
+
+    mycursor.execute("UPDATE Telephone SET stock = stock+%s WHERE id_telephone=%s", (qte['quantite'] ,tele['id_telephone']))
+    mycursor.fetchone()
+
+    tuple_delete = (client_id, idPanier)
     sql = "DELETE FROM panier WHERE idUser=%s AND idPanier=%s"
     mycursor.execute(sql, tuple_delete)
 
