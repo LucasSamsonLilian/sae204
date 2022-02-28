@@ -8,7 +8,13 @@
 <h3>articles</h3>
 <div class="row">
                 {% for article in articles  %}
+                    {% if article.stock < 25 and article.stock>0 %}
+                        <div class="card col-4 mt-4 bg-warning">
+                    {% elif article.stock < 1 %}
+                        <div class="card col-4 mt-4 bg-danger">
+                    {% else %}
                         <div class="card col-4 mt-4">
+                    {% endif %}
                             <div class="card-body border-dark rounded">
                                 <a href="/client/article/details/{{ article.id_telephone }}">
                                 <h2 class="card-title">

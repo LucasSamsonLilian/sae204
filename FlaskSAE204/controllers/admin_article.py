@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import request, render_template, redirect, url_for, flash, session
+from flask import request, render_template, redirect, url_for, flash
 
 from connexion_db import get_db
 
@@ -13,6 +13,7 @@ def show_article():
     mycursor = get_db().cursor()
     mycursor.execute("SELECT * FROM Telephone")
     articles = mycursor.fetchall()
+    print(articles)
     return render_template('admin/article/show_article.html', articles=articles)
 
 @admin_article.route('/admin/article/add', methods=['GET'])
