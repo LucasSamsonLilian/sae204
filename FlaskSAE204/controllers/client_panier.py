@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import request, redirect, session
+from flask import request, redirect, session, flash
 
 from connexion_db import get_db
 import datetime
@@ -38,16 +38,15 @@ def client_panier_add():
             tuple_update_panier = (quantite, client_id, id_article)
             sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
             mycursor.execute(sql, tuple_update_panier)
-            mycursor.execute("UPDATE Telephone SET stock=stock-%s  WHERE id_telephone = %s", (quantite,id_article))
-            mycursor.fetchone()
         else:
             tuple_insert = (date, prix['prix'],quantite,id_article,client_id,nom['modele'] )
             sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
             mycursor.execute(sql, tuple_insert)
-            mycursor.execute("UPDATE Telephone SET stock=stock-%s  WHERE id_telephone = %s", (quantite,id_article))
-            mycursor.fetchone()
+        get_db().commit()
+    else:
+        flash(u'Pas de\' telephone de ce type dans nos stock')
 
-    get_db().commit()
+
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
@@ -61,8 +60,6 @@ def client_panier_delete():
     mycursor.execute("SELECT panier.quantite FROM panier WHERE idPanier = %s", (idPanier))
     qte = mycursor.fetchone()
 
-    mycursor.execute("SELECT panier.id_telephone FROM panier WHERE idPanier = %s", (idPanier))
-    tele = mycursor.fetchone()
 
     if qte['quantite'] > 1:
         tuple_update = (1, client_id, idPanier)
@@ -73,8 +70,6 @@ def client_panier_delete():
         sql = "DELETE FROM panier WHERE idUser=%s AND idPanier=%s"
         mycursor.execute(sql, tuple_delete)
 
-    mycursor.execute("UPDATE Telephone SET stock = stock+1 WHERE id_telephone=%s", (tele['id_telephone']))
-    mycursor.fetchone()
 
     get_db().commit()
 
@@ -104,17 +99,6 @@ def client_panier_delete_line():
     mycursor = get_db().cursor()
     client_id = session['user_id']
     idPanier = request.form.get('idPanier')
-
-
-
-    mycursor.execute("SELECT panier.id_telephone FROM panier WHERE idPanier = %s", (idPanier))
-    tele = mycursor.fetchone()
-
-    mycursor.execute("SELECT panier.quantite FROM panier WHERE idPanier = %s", (idPanier))
-    qte = mycursor.fetchone()
-
-    mycursor.execute("UPDATE Telephone SET stock = stock+%s WHERE id_telephone=%s", (qte['quantite'] ,tele['id_telephone']))
-    mycursor.fetchone()
 
     tuple_delete = (client_id, idPanier)
     sql = "DELETE FROM panier WHERE idUser=%s AND idPanier=%s"

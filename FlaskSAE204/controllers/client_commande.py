@@ -13,9 +13,11 @@ client_commande = Blueprint('client_commande', __name__,
 def client_commande_add():
     mycursor = get_db().cursor()
     client_id = session['user_id']
+
     sql = '''SELECT * FROM panier WHERE idUser=%s'''
     mycursor.execute(sql,client_id)
     items_panier = mycursor.fetchall()
+
     if items_panier is None or len(items_panier) < 1:
         flash(u'Pas d\'articles dans le panier')
         return redirect(url_for('client_index'))
@@ -23,11 +25,14 @@ def client_commande_add():
         flash(u'Commande ajouté')
 
     date=datetime.datetime.now()
+
     tuple_insert = (date,client_id,1)
     sql = '''INSERT INTO commande(date_achat,idUser,idEtat) VALUES(%s,%s,%s)'''
     mycursor.execute(sql, tuple_insert)
+
     sql = '''SELECT last_insert_id() as last_insert_id'''
     mycursor.execute(sql)
+
     commande_id = mycursor.fetchone()
     print(commande_id,tuple_insert)
 
@@ -35,9 +40,15 @@ def client_commande_add():
         tuple_delete = (client_id,item['id_telephone'])
         sql = '''DELETE FROM panier WHERE idUser = %s AND id_telephone = %s'''
         mycursor.execute(sql,tuple_delete)
+
         sql = '''SELECT prix FROM telephone WHERE id_telephone = %s'''
         mycursor.execute(sql,item['id_telephone'])
-        prix = mycursor.fetchone()
+        prix = mycursor.fetchone()  
+
+        tuple_update_stock=(item['quantite'], item['id_telephone'])
+        sql="UPDATE Telephone SET stock=stock-%s WHERE id_telephone= %s"
+        mycursor.execute(sql, tuple_update_stock)
+
         sql = '''INSERT INTO ligneCommande(commande_id,telephone_id,prix,quantite) VALUES (%s,%s,%s,%s)'''
         tuple_insert = (commande_id['last_insert_id'], item['id_telephone'], prix['prix'], item['quantite'])
         print(tuple_insert)
