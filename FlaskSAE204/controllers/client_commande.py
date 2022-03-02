@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint, url_for
-from flask import render_template, redirect, flash, session
+from flask import render_template, redirect, flash, session, request
 from connexion_db import get_db
 import datetime
 
@@ -89,8 +89,10 @@ def client_commande_show():
     mycursor.execute(sql)
     commande_id = mycursor.fetchone()
 
+    id_commande = request.form.get('idCommande')
+
     sql = '''SELECT * FROM ligneCommande WHERE commande_id = %s'''
-    mycursor.execute(sql, commande_id['last_insert_id'])
+    mycursor.execute(sql, (id_commande,))
     articles_commande = mycursor.fetchall()
     return render_template('client/commandes/show.html', commandes=commandes,articles_commande=articles_commande )
 #

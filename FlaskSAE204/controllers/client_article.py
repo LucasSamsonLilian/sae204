@@ -44,14 +44,17 @@ def client_article_show():                                 # remplace client_ind
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):
     mycursor = get_db().cursor()
-    commentaires=None
+    client_id = session['user_id']
 
     sql = "SELECT * FROM telephone WHERE id_telephone=%s"
     mycursor.execute(sql, id)
     telephone = mycursor.fetchone()
     article = telephone
 
-    commandes_articles=[]
+
+    sql="SELECT * FROM ligneCommande INNER JOIN commande ON commande.idCommande = ligneCommande.commande_id WHERE commande.idUser=%s"
+    mycursor.execute(sql, client_id)
+    commandes_articles=mycursor.fetchall()
     commentaires=[]
 
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)

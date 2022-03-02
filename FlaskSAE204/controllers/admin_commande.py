@@ -43,12 +43,10 @@ def admin_commande_show():
         retour = mycursor.fetchone()
         commande['libelle'] = retour.get("libelle")
 
-    sql = '''SELECT last_insert_id() as last_insert_id'''
-    mycursor.execute(sql)
-    commande_id = mycursor.fetchone()
+    id_commande = request.form.get('idCommande')
 
     sql = '''SELECT * FROM ligneCommande WHERE commande_id = %s'''
-    mycursor.execute(sql, commande_id['last_insert_id'])
+    mycursor.execute(sql, (id_commande,))
     articles_commande = mycursor.fetchall()
     return render_template('admin/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
 
