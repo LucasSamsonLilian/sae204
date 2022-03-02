@@ -51,11 +51,7 @@ def client_article_details(id):
     telephone = mycursor.fetchone()
     article = telephone
 
-    mycursor.execute("SELECT panier.idPanier FROM panier WHERE idUser=%s", (id))
-    idPanier = mycursor.fetchone()
-
-    sql = "SELECT * FROM commande WHERE idPanier=%s"
-    mycursor.execute(sql, idPanier)
-    commandes_articles = mycursor.fetchall()
+    commandes_articles=[]
+    commentaires=[]
 
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)
