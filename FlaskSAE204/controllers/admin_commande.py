@@ -48,6 +48,19 @@ def admin_commande_show():
     sql = '''SELECT * FROM ligneCommande WHERE commande_id = %s'''
     mycursor.execute(sql, (id_commande,))
     articles_commande = mycursor.fetchall()
+
+    for acommande in articles_commande:
+        tuple_select = (acommande['telephone_id'])
+        sql = '''SELECT modele FROM Telephone WHERE id_telephone = %s'''
+        mycursor.execute(sql, tuple_select)
+        retour = mycursor.fetchone()
+        acommande['telephone_id'] = retour.get("modele")
+
+        sql = '''SELECT quantite*prix AS prix FROM ligneCommande WHERE telephone_id = %s'''
+        mycursor.execute(sql, tuple_select)
+        retour = mycursor.fetchone()
+        acommande['prix_total'] = retour.get("prix")
+
     return render_template('admin/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
 
 
