@@ -56,10 +56,11 @@ def admin_commande_show():
         retour = mycursor.fetchone()
         acommande['telephone_id'] = retour.get("modele")
 
-        sql = '''SELECT quantite*prix AS prix FROM ligneCommande WHERE telephone_id = %s'''
+        tuple_select = (acommande['idLigneCommande'])
+        sql = '''SELECT (quantite*prix) AS prixtot FROM ligneCommande WHERE idLigneCommande = %s '''
         mycursor.execute(sql, tuple_select)
         retour = mycursor.fetchone()
-        acommande['prix_total'] = retour.get("prix")
+        acommande['prix_total'] = retour.get("prixtot")
 
     return render_template('admin/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
 
