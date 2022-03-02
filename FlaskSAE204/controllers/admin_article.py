@@ -50,7 +50,10 @@ def delete_article():
 @admin_article.route('/admin/article/edit/<int:id>', methods=['GET'])
 def edit_article(id):
     mycursor = get_db().cursor()
-    article = None
+    sql="SELECT * FROM Telephone WHERE id_telephone = %s"
+    mycursor.execute(sql, id)
+    article = mycursor.fetchone()
+
     types_articles = None
     return render_template('admin/article/edit_article.html', article=article, types_articles=types_articles)
 

@@ -112,7 +112,6 @@ def client_panier_delete_line():
 
 @client_panier.route('/client/panier/filtre', methods=['POST'])
 def client_panier_filtre():
-    # SQL
     filter_word = request.form.get('filter_word', None)
     filter_prix_min = request.form.get('filter_prix_min', None)
     filter_prix_max = request.form.get('filter_prix_max', None)
@@ -128,6 +127,6 @@ def client_panier_filtre_suppr():
     session.pop('filter_prix_min', None)
     session.pop('filter_prix_max', None)
     session.pop('filter_types', None)
-    print("suppr filtre")
+
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))

@@ -5,6 +5,61 @@
 
 {% block body %}
 {#  <h2>modifier d'un article</h2>#}
+<div class="row">
+                        <div class="card col-4 mt-4">
+                            <div class="card-body border-dark rounded">
+
+                                <h2 class="card-title">
+                                    <span style="color: #0b2e13">
+
+                                        {{ article.modele }}
+
+
+                                    </span><br>
+                                    {{ article.prix }}
+                                    €
+
+                                </h2>
+                                <div class="card-body">
+                                     {%  if article.image_telephone is not none %}
+                                        <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/' + article['image_telephone']) }}"  alt="image  de {{ article.modele }}" >
+                                    {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ article.modele }}" >
+                                    {% endif %}
+                                    <hr>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                            {% if article.stock is defined %}
+                                 {% if article.stock > 0 %}
+                                    <small class="">Stock restant : {{ article.stock }}</small>
+                                 {% else %}
+                                    <small class="">article  momentanément indisponible</small>
+                                 {% endif %}
+                            {% endif %}
+                                <br>
+                            {% if article.nb_notes is defined %}
+                            {% if article.nb_notes > 1 %}
+                                 <a  href="/client/article/details/{{ article.id_telephone }}">
+                                    <span style="color: #3A7734"> note : {{  "{:,.1f}".format(article.moy_notes) }}</span>
+                                 </a>
+                            {% endif %}
+                            {% endif %}
+                            {% if article.nb_avis is defined %}
+                            {% if article.nb_avis > 0 %}
+                                 <a href="/client/article/details/{{ article.id_telephone }}">
+                                    <span style="color: #3A7734">({{ article.nb_avis }} avis)</span>
+                                 </a>
+                            {% endif %}
+                            {% endif %}
+                            </div>
+                        </div>
+        </div>
+    </div>
+<a  class="btn btn-outline-success" href="">valider l'edit</a>
+<br><br>
+
+
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}
