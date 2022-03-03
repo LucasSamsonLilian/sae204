@@ -68,6 +68,12 @@
                                  </a>
                             {% endif %}
                             {% endif %}
+
+                                <form  action="/admin/article/delete" method="post">
+                                    <input type="hidden" name="id_telephone" value="{{ article.id_telephone }}">
+                                    <button class="btn btn-danger float-right">Supprimer</button>
+                                </form>
+
                             </div>
                         </div>
                 {% endfor %}

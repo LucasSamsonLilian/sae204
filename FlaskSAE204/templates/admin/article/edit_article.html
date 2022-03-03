@@ -8,18 +8,25 @@
 <div class="row">
                         <div class="card col-4 mt-4">
                             <div class="card-body border-dark rounded">
+                                <form  action="/admin/article/edit" method="post">
+                                    <input type="hidden" name="id_telephone" value="{{ article.id_telephone }}">
+                                    Modele:<br>
+                                    <div class="input-group input-group-sm" style="width: 8rem !important;">
+                                        <input type="text" class="form-control" style="width: 8rem !important;" value="{{ article.modele }}" name="modele_telephone">
+                                    </div>
 
-                                <h2 class="card-title">
-                                    <span style="color: #0b2e13">
+                                    Prix:<br>
+                                    <div class="input-group input-group-sm" style="width: 8rem !important;">
+                                        <input type="number" class="form-control" style="width: 8rem !important;" value="{{ article.prix }}" name="prix_telephone">
+                                    </div>
 
-                                        {{ article.modele }}
+                                    Stock:<br>
+                                    <div class="input-group input-group-sm" style="width: 8rem !important;">
+                                        <input type="number" step="1" min="0" class="form-control" style="width: 8rem !important;" value="{{ article.stock }}" name="stock_telephone">
+                                    </div>
+                                    <button class="btn btn-success float-right">valider l'edit</button>
+                                </form>
 
-
-                                    </span><br>
-                                    {{ article.prix }}
-                                    €
-
-                                </h2>
                                 <div class="card-body">
                                      {%  if article.image_telephone is not none %}
                                         <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/' + article['image_telephone']) }}"  alt="image  de {{ article.modele }}" >
@@ -29,34 +36,9 @@
                                 </div>
                                 </a>
                             </div>
-                            <div class="card-footer">
-                            {% if article.stock is defined %}
-                                 {% if article.stock > 0 %}
-                                    <small class="">Stock restant : {{ article.stock }}</small>
-                                 {% else %}
-                                    <small class="">article  momentanément indisponible</small>
-                                 {% endif %}
-                            {% endif %}
-                                <br>
-                            {% if article.nb_notes is defined %}
-                            {% if article.nb_notes > 1 %}
-                                 <a  href="/client/article/details/{{ article.id_telephone }}">
-                                    <span style="color: #3A7734"> note : {{  "{:,.1f}".format(article.moy_notes) }}</span>
-                                 </a>
-                            {% endif %}
-                            {% endif %}
-                            {% if article.nb_avis is defined %}
-                            {% if article.nb_avis > 0 %}
-                                 <a href="/client/article/details/{{ article.id_telephone }}">
-                                    <span style="color: #3A7734">({{ article.nb_avis }} avis)</span>
-                                 </a>
-                            {% endif %}
-                            {% endif %}
-                            </div>
                         </div>
         </div>
     </div>
-<a  class="btn btn-outline-success" href="">valider l'edit</a>
 <br><br>
 
 

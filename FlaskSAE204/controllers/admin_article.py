@@ -41,7 +41,11 @@ def valid_add_article():
 @admin_article.route('/admin/article/delete', methods=['POST'])
 def delete_article():
     # id = request.args.get('id', '')
-    id = request.form.get('id', '')
+    id = request.form.get('id_telephone', '')
+    mycursor = get_db().cursor()
+    mycursor.execute("DELETE FROM Telephone WHERE id_telephone = %s",(id))
+    mycursor.fetchone()
+    get_db().commit()
 
     print("un article supprimé, id :", id)
     flash(u'un article supprimé, id : ' + id)
@@ -59,16 +63,16 @@ def edit_article(id):
 
 @admin_article.route('/admin/article/edit', methods=['POST'])
 def valid_edit_article():
-    nom = request.form['nom']
-    id = request.form.get('id', '')
-    type_article_id = request.form.get('type_article_id', '')
-    #type_article_id = int(type_article_id)
-    prix = request.form.get('prix', '')
-    stock = request.form.get('stock', '')
-    description = request.form.get('description', '')
-    image = request.form.get('image', '')
+    mycursor = get_db().cursor()
 
-    print(u'article modifié , nom : ', nom, ' - type_article:', type_article_id, ' - prix:', prix, ' - stock:', stock, ' - description:', description, ' - image:', image)
-    message = u'article modifié , nom:'+nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - stock:'+  stock + ' - description:' + description + ' - image:' + image
-    flash(message)
+    id = request.form.get('id_telephone', '')
+    stock = request.form.get('stock_telephone', '')
+    prix = request.form.get('prix_telephone', '')
+    modele = request.form.get('modele_telephone', '')
+
+    mycursor.execute("UPDATE Telephone SET stock=%s, prix=%s, modele=%s  WHERE id_telephone=%s",(stock, prix, modele, id))
+    mycursor.fetchone()
+
+    get_db().commit()
+
     return redirect(url_for('admin_article.show_article'))
