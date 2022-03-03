@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import request, render_template, redirect, url_for, flash
-
+import datetime
 from connexion_db import get_db
 
 admin_article = Blueprint('admin_article', __name__,
@@ -24,17 +24,26 @@ def add_article():
 
 @admin_article.route('/admin/article/add', methods=['POST'])
 def valid_add_article():
-    nom = request.form.get('nom', '')
-    type_article_id = request.form.get('type_article_id', '')
-   # type_article_id = int(type_article_id)
-    prix = request.form.get('prix', '')
-    stock = request.form.get('stock', '')
-    description = request.form.get('description', '')
-    image = request.form.get('image', '')
+    mycursor = get_db().cursor()
+
+    stock = request.form.get('stock_telephone', '')
+    prix = request.form.get('prix_telephone', '')
+    modele = request.form.get('modele_telephone', '')
+
+    mycursor.execute("SELECT COUNT(*)+1 as id FROM Telephone")
+    id=mycursor.fetchone()
+    print(id)
+
+    date = datetime.datetime.now()
+
+    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(id['id'], modele, 'telephone', date, prix, modele, 1, 1, 1, 1, 1, 1, 1, stock ))
+    mycursor.fetchone()
+
+    get_db().commit()
 
 
-    print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix, ' - stock:', stock, ' - description:', description, ' - image:', image)
-    message = u'article ajouté , nom:'+nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - stock:'+  stock + ' - description:' + description + ' - image:' + image
+
+    message = u'article ajouté'
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 

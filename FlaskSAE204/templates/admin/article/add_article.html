@@ -6,6 +6,27 @@
 
 {% block body %}
   <h2>ajout d'un article</h2>
+<div class="card col-4 mt-4">
+        <div class="card-body border-dark rounded">
+            <form  action="/admin/article/add" method="post">
+                <input type="hidden" name="id_telephone" value="">
+                Modele:<br>
+                <div class="input-group input-group-sm" style="width: 8rem !important;">
+                    <input type="text" class="form-control" style="width: 8rem !important;" value="" name="modele_telephone">
+                </div>
+
+                Prix:<br>
+                <div class="input-group input-group-sm" style="width: 8rem !important;">
+                    <input type="number" class="form-control" style="width: 8rem !important;" value="" name="prix_telephone">
+                </div>
+
+                Stock:<br>
+                <div class="input-group input-group-sm" style="width: 8rem !important;">
+                    <input type="number" step="1" min="0" class="form-control" style="width: 8rem !important;" value="" name="stock_telephone">
+                </div>
+
+                <button class="btn btn-success float-right">valider l'ajout</button>
+            </form>
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}
