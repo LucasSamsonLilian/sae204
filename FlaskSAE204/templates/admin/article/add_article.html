@@ -12,21 +12,77 @@
                 <input type="hidden" name="id_telephone" value="">
                 Modele:<br>
                 <div class="input-group input-group-sm" style="width: 8rem !important;">
-                    <input type="text" class="form-control" style="width: 8rem !important;" value="" name="modele_telephone">
+                    <input required type="text" class="form-control" style="width: 8rem !important;" value="" name="modele_telephone">
+                </div>
+
+                Poids:<br>
+                <div class="input-group input-group-sm" style="width: 8rem !important;">
+                    <input required type="number" class="form-control" style="width: 8rem !important;" value="" name="poids_telephone">
+                </div>
+
+                Taille de l'écran:<br>
+                <div class="input-group input-group-sm" style="width: 8rem !important;">
+                    <input required type="number" class="form-control" style="width: 8rem !important;" value="" name="taille_telephone">
                 </div>
 
                 Prix:<br>
                 <div class="input-group input-group-sm" style="width: 8rem !important;">
-                    <input type="number" class="form-control" style="width: 8rem !important;" value="" name="prix_telephone">
+                    <input required type="number" class="form-control" style="width: 8rem !important;" value="" name="prix_telephone">
                 </div>
 
                 Stock:<br>
                 <div class="input-group input-group-sm" style="width: 8rem !important;">
-                    <input type="number" step="1" min="0" class="form-control" style="width: 8rem !important;" value="" name="stock_telephone">
+                    <input required type="number" step="1" min="0" class="form-control" style="width: 8rem !important;" value="" name="stock_telephone">
                 </div>
 
-                <button class="btn btn-success float-right">valider l'ajout</button>
+
+
+                Marque:<br/>
+                <select name="marque_telephone" required>
+                    <option></option>
+                    {% for marque in marques %}
+                        <option value="{{ marque.code_marque }}">{{ marque.nom_marque }}</option>
+                    {% endfor %}
+                </select><br>
+
+                Ram:<br/>
+                <select name="ram_telephone" required>
+                    <option></option>
+                    {% for ram in rams %}
+                        <option value="{{ ram.id_ram }}">{{ ram.ram }} Go</option>
+                    {% endfor %}
+                </select><br>
+
+                Stockage:<br/>
+                <select name="stockage_telephone" required>
+                    <option></option>
+                    {% for stockage in stockages %}
+                        <option value="{{ stockage.id_stockage }}">{{ stockage.stockage }} Go</option>
+                    {% endfor %}
+                </select><br>
+
+                Fournisseur:<br/>
+                <select name="fournisseur_telephone" required>
+                    <option></option>
+                    {% for fournisseur in fournisseurs %}
+                        <option value="{{ fournisseur.code_fournisseur }}">{{ fournisseur.nom_fournisseur }}</option>
+                    {% endfor %}
+                </select><br>
+                <br><br>
+                <div class="bg-warning">
+                    Image: <br>(en cours de developpement... p_p)<br>
+                        <input type="file" name="picture">
+                </div>
+                <br>
+
+                <button class="btn btn-success float-left">Valider</button>
             </form>
+
+            <a href="/admin/article/show">
+                <button class="btn btn-danger float-left">Annulez</button>
+            </a>
+
+
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}

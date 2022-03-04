@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import request, render_template, redirect, url_for, flash
+from flask import request, render_template, redirect, url_for, flash, Flask
 import datetime
 from connexion_db import get_db
 
@@ -13,14 +13,29 @@ def show_article():
     mycursor = get_db().cursor()
     mycursor.execute("SELECT * FROM Telephone")
     articles = mycursor.fetchall()
-    print(articles)
     return render_template('admin/article/show_article.html', articles=articles)
 
 @admin_article.route('/admin/article/add', methods=['GET'])
 def add_article():
     mycursor = get_db().cursor()
-    types_articles = None
-    return render_template('admin/article/add_article.html', types_articles=types_articles)
+    sql = "SELECT * FROM marque"
+    mycursor.execute(sql)
+    marques = mycursor.fetchall()
+
+    sql = "SELECT * FROM ram"
+    mycursor.execute(sql)
+    ram = mycursor.fetchall()
+
+    sql = "SELECT * FROM stockage"
+    mycursor.execute(sql)
+    stockage = mycursor.fetchall()
+
+    sql = "SELECT * FROM fournisseur"
+    mycursor.execute(sql)
+    fournisseur = mycursor.fetchall()
+
+
+    return render_template('admin/article/add_article.html', marques=marques, rams=ram, stockages=stockage, fournisseurs=fournisseur)
 
 @admin_article.route('/admin/article/add', methods=['POST'])
 def valid_add_article():
@@ -29,19 +44,25 @@ def valid_add_article():
     stock = request.form.get('stock_telephone', '')
     prix = request.form.get('prix_telephone', '')
     modele = request.form.get('modele_telephone', '')
+    marque = request.form.get('marque_telephone', '')
+    taille = request.form.get('taille_telephone', '')
+    poids = request.form.get('poids_telephone', '')
+    ram = request.form.get('ram_telephone', '')
+    stockage = request.form.get('stockage_telephone', '')
+    fournisseur = request.form.get('fournisseur_telephone', '')
+
+
+
 
     mycursor.execute("SELECT COUNT(*)+1 as id FROM Telephone")
     id=mycursor.fetchone()
-    print(id)
 
     date = datetime.datetime.now()
 
-    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(id['id'], modele, 'telephone', date, prix, modele, 1, 1, 1, 1, 1, 1, 1, stock ))
+    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(id['id'], modele, 'telephone', date, prix,modele, poids, taille, ram, stockage, fournisseur, 1, marque, stock ))
     mycursor.fetchone()
 
     get_db().commit()
-
-
 
     message = u'article ajouté'
     flash(message)
@@ -56,7 +77,6 @@ def delete_article():
     mycursor.fetchone()
     get_db().commit()
 
-    print("un article supprimé, id :", id)
     flash(u'un article supprimé, id : ' + id)
     return redirect(url_for('admin_article.show_article'))
 
