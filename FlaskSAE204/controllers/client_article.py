@@ -37,6 +37,13 @@ def client_article_show():                                 # remplace client_ind
     telephone = mycursor.fetchall()
     articles = telephone
 
+    for article in articles:
+        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s",(article['code_marque']))
+        marque = mycursor.fetchone()
+        print(marque)
+        article['nom_marque'] = marque.get('nom_marque')
+
+
 
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=types_articles)
 
