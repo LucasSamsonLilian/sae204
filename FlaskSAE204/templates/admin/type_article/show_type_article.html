@@ -6,6 +6,42 @@
 
 {% block body %}
 <h3>Types d'article</h3>
+<div class="row">
+                {% for ligne in type_articles  %}
+                        <div class="card col-4 mt-4">
+
+                            <div class="card-body border-dark rounded">
+                                <a href="/admin/type-article/edit/{{ ligne.code_marque }}">
+
+                                <h2 class="card-title">
+                                    <span style="color: #0b2e13">
+
+                                        {{ ligne.nom_marque }}
+
+                                    </span><br>
+
+                                </h2>
+                                <div class="card-body">
+                                    {%  if ligne.image_marque is not none %}
+                                        <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/' + ligne['image_marque']) }}"  alt="image  de {{ ligne.nom_marque }}" >
+                                    {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ ligne.nom_marque }}" >
+                                    {% endif %}
+                                    <hr>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                                <br>
+                                <form  action="/admin/type-article/delete" method="post">
+                                    <input type="hidden" name="code_marque" value="{{ ligne.code_marque }}">
+                                    <button class="btn btn-danger float-right">Supprimer</button>
+                                </form>
+
+                            </div>
+                        </div>
+                {% endfor %}
+        </div>
+    </div>
 <a class="btn btn-outline-success" href="/admin/type-article/add">ajouter un type d'article</a>
 <br><br>
 

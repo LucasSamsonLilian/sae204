@@ -43,10 +43,11 @@ INSERT INTO couleur VALUES (1,'Acajou'),(2,'Amande'),(3,'Argent'),(4,'Blanc'),(5
 CREATE TABLE IF NOT EXISTS marque(
    code_marque INT,
    nom_marque VARCHAR(50),
+   image_marque VARCHAR(50),
    PRIMARY KEY(code_marque)
 );
 
-INSERT INTO marque VALUES (1,'Apple'),(2,'Samsung'),(3,'Xiaomi'),(4,'Oppo'),(5,'LG'),(6,'Huawei'),(3310,'Nokia');
+INSERT INTO marque VALUES (1,'Apple', 'apple.png'),(2,'Samsung', 'samsung.png'),(3,'Xiaomi', 'xiaomi.png'),(4,'Oppo', 'oppo.png'),(5,'LG', 'lg.png'),(6,'Huawei', 'huawei.png'),(3310,'Nokia', 'nokia.png');
 
 
 CREATE TABLE IF NOT EXISTS ville(

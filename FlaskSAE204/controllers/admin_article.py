@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import request, render_template, redirect, url_for, flash, Flask
+from flask import request, render_template, redirect, url_for, flash
 import datetime
 from connexion_db import get_db
 
@@ -73,11 +73,17 @@ def delete_article():
     # id = request.args.get('id', '')
     id = request.form.get('id_telephone', '')
     mycursor = get_db().cursor()
-    mycursor.execute("DELETE FROM Telephone WHERE id_telephone = %s",(id))
-    mycursor.fetchone()
-    get_db().commit()
 
-    flash(u'un article supprimé, id : ' + id)
+    mycursor.execute("SELECT COUNT(*) as id FROM ligneCommande WHERE telephone_id=%s", (id))
+    nbTeleMarque = mycursor.fetchone()
+
+    if (nbTeleMarque['id'] == 0):
+        mycursor.execute("DELETE FROM Telephone WHERE id_telephone = %s",(id))
+        mycursor.fetchone()
+        get_db().commit()
+        flash(u'un article supprimé')
+    else:
+        flash(u'cet article ne peut etre supprimé')
     return redirect(url_for('admin_article.show_article'))
 
 @admin_article.route('/admin/article/edit/<int:id>', methods=['GET'])
@@ -105,3 +111,83 @@ def valid_edit_article():
     get_db().commit()
 
     return redirect(url_for('admin_article.show_article'))
+
+##############################gestion types articles########################################################################################
+
+
+@admin_article.route('/admin/type-article/show')
+def show_type_article():
+    mycursor = get_db().cursor()
+    mycursor.execute("SELECT * FROM marque")
+    type_articles = mycursor.fetchall()
+    return render_template('admin/type_article/show_type_article.html', type_articles=type_articles)
+
+
+@admin_article.route('/admin/type-article/add', methods=['GET'])
+def add_type_article():
+    return render_template('admin/type_article/add_type_article.html')
+
+@admin_article.route('/admin/type-article/add', methods=['POST'])
+def valid_add_type_article():
+    mycursor = get_db().cursor()
+
+    nom = request.form.get('nom_marque', '')
+
+    mycursor.execute("SELECT COUNT(*) as id FROM marque")
+    id=mycursor.fetchone()
+
+
+    mycursor.execute("INSERT INTO marque VALUE (%s, %s, %s)",(id['id'], nom, nom))
+    mycursor.fetchone()
+
+    get_db().commit()
+
+    message = u'marque ajouté'
+    flash(message)
+    return redirect(url_for('admin_article.show_type_article'))
+
+@admin_article.route('/admin/type-article/delete', methods=['POST'])
+def delete_type_article():
+    # id = request.args.get('id', '')
+    id = request.form.get('code_marque', '')
+
+    mycursor = get_db().cursor()
+
+    mycursor.execute("SELECT COUNT(*) as id FROM Telephone WHERE code_marque=%s",(id))
+    nbTeleMarque= mycursor.fetchone()
+
+    if(nbTeleMarque['id']==0):
+        mycursor.execute("DELETE FROM marque WHERE code_marque = %s",(id))
+        mycursor.fetchone()
+        get_db().commit()
+        flash(u'une marque supprimé')
+
+    else:
+        flash(u'cette maque ne peut etre supprimé')
+
+    return redirect(url_for('admin_article.show_type_article'))
+
+@admin_article.route('/admin/type-article/edit/<int:id>', methods=['GET'])
+def edit_type_article(id):
+    mycursor = get_db().cursor()
+    sql="SELECT * FROM marque WHERE code_marque = %s"
+    mycursor.execute(sql, id)
+    types_articles = mycursor.fetchone()
+
+    return render_template('admin/type_article/edit_type_article.html', type_article=types_articles)
+
+@admin_article.route('/admin/type-article/edit', methods=['POST'])
+def valid_type_edit_article():
+    mycursor = get_db().cursor()
+
+    id = request.form.get('code_marque', '')
+    nom_marque = request.form.get('nom_marque', '')
+
+
+    mycursor.execute("UPDATE marque SET nom_marque=%s  WHERE code_marque=%s",(nom_marque, id))
+    mycursor.fetchone()
+
+    get_db().commit()
+
+    return redirect(url_for('admin_article.show_type_article'))
+
