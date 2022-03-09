@@ -51,6 +51,28 @@ def client_panier_add():
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
+
+@client_panier.route('/client/panier/add2', methods=['POST'])
+def client_panier_add2():
+    mycursor = get_db().cursor()
+
+    client_id = session['user_id']
+    id_panier=request.form.get('idPanier')
+    quantite = request.form.get('quantite')
+
+    sql = "SELECT panier.id_telephone as id FROM panier WHERE idPanier=%s AND idUser=%s"
+    mycursor.execute(sql, (id_panier, client_id))
+    id_article= mycursor.fetchone()
+
+
+    tuple_update_panier = (quantite ,client_id, id_article['id'])
+    sql = "UPDATE panier SET quantite=quantite+%s WHERE idUser = %s AND id_telephone=%s"
+    mycursor.execute(sql, tuple_update_panier)
+    get_db().commit()
+
+    return redirect('/client/article/show')
+
+
 @client_panier.route('/client/panier/delete', methods=['POST'])
 def client_panier_delete():
     mycursor = get_db().cursor()

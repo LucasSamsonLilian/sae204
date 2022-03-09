@@ -69,7 +69,6 @@ def admin_commande_show():
 def admin_commande_valider():
     mycursor = get_db().cursor()
     idCommande = request.form.get("idCommande")
-    print(idCommande)
 
     sql = '''UPDATE commande SET idEtat = 3 WHERE idCommande = %s'''
     mycursor.execute(sql, (idCommande,))

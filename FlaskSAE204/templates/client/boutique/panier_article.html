@@ -27,13 +27,11 @@
                             <td>{{itemPanier.prix_unit}}</td>
                             <td>{{ "{:,.2f} €".format((itemPanier.prix_unit * itemPanier.quantite)) }}</td>
                             <td>
-                               {% if itemPanier.stock is defined and itemPanier.stock > 0 %}
-                                <form action="/client/panier/add" style="display: inline-block;"  method="post">
+                                <form action="/client/panier/add2" style="display: inline-block;"  method="post">
                                         <input type="hidden" name="quantite" value="1">
                                         <input type="hidden" name="idPanier" value="{{ itemPanier.idPanier }}">
                                     <button class="btn btn-primary" > + </button>
                                 </form>
-                               {% endif %}
                                 <form action="/client/panier/delete"  style="display: inline-block;"  method="post">
                                     <input type="hidden" name="idPanier" value="{{ itemPanier.idPanier }}">
                                     <button class="btn btn-primary" > - </button>

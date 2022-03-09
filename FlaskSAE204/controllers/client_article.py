@@ -40,7 +40,6 @@ def client_article_show():                                 # remplace client_ind
     for article in articles:
         mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s",(article['code_marque']))
         marque = mycursor.fetchone()
-        print(marque)
         article['nom_marque'] = marque.get('nom_marque')
 
 

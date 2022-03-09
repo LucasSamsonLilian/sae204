@@ -34,7 +34,6 @@ def client_commande_add():
     mycursor.execute(sql)
 
     commande_id = mycursor.fetchone()
-    print(commande_id,tuple_insert)
 
     for item in items_panier:
         tuple_delete = (client_id,item['id_telephone'])
@@ -51,7 +50,6 @@ def client_commande_add():
 
         sql = '''INSERT INTO ligneCommande(commande_id,telephone_id,prix,quantite) VALUES (%s,%s,%s,%s)'''
         tuple_insert = (commande_id['last_insert_id'], item['id_telephone'], prix['prix'], item['quantite'])
-        print(tuple_insert)
         mycursor.execute(sql,tuple_insert)
     get_db().commit()
     return redirect('/client/article/show')
