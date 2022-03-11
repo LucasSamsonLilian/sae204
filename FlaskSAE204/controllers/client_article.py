@@ -60,6 +60,15 @@ def client_article_details(id):
     sql="SELECT * FROM ligneCommande INNER JOIN commande ON commande.idCommande = ligneCommande.commande_id WHERE commande.idUser=%s"
     mycursor.execute(sql, client_id)
     commandes_articles=mycursor.fetchall()
-    commentaires=[]
 
-    return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)
+    sql="SELECT * FROM commentaire WHERE telephone_id=%s"
+    mycursor.execute(sql, id)
+    commentaires=mycursor.fetchall()
+
+    tuple_commeUser=(id, client_id)
+    sql = "SELECT * FROM commentaire WHERE telephone_id=%s AND user_id = %s"
+    mycursor.execute(sql, tuple_commeUser)
+    commentaires_user = mycursor.fetchall()
+
+
+    return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles, commentaires_user=commentaires_user)
