@@ -16,13 +16,10 @@ def client_comment_add():
     note = request.form.get('note', None)
     comm = request.form.get('commentaire', None)
 
-    mycursor.execute("SELECT COUNT(id_commentaire)+1 as id FROM commentaire")
-    id=mycursor.fetchone()
-
     mycursor.execute("SELECT userC.username as nom FROM userC WHERE idUser = %s", user_id)
     nom = mycursor.fetchone()
 
-    tuple_insert=(id['id'], comm, note, nom['nom'], user_id, article_id)
+    tuple_insert=(None, comm, note, nom['nom'], user_id, article_id)
     sql="INSERT INTO commentaire (id_commentaire, commentaire, note, nomUser, user_id, telephone_id) VALUES(%s, %s, %s, %s, %s, %s)"
     mycursor.execute(sql, tuple_insert)
 
