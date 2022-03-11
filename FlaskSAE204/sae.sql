@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS marque(
    PRIMARY KEY(code_marque)
 );
 
-INSERT INTO marque VALUES (1,'Apple', 'apple.png'),(2,'Samsung', 'samsung.png'),(3,'Xiaomi', 'xiaomi.png'),(4,'Oppo', 'oppo.png'),(5,'LG', 'lg.png'),(6,'Huawei', 'huawei.png'),(3310,'Nokia', 'nokia.png');
+INSERT INTO marque VALUES (1,'Apple', 'apple.png'),(2,'Samsung', 'samsung.png'),(3,'Xiaomi', 'xiaomi.png'),(4,'Oppo', 'oppo.jpg'),(5,'LG', 'lg.png'),(6,'Huawei', 'huawei.png'),(3310,'Nokia', 'nokia.png');
 
 
 CREATE TABLE IF NOT EXISTS ville(
