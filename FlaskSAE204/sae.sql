@@ -44,10 +44,11 @@ INSERT INTO couleur VALUES (1,'Acajou'),(2,'Amande'),(3,'Argent'),(4,'Blanc'),(5
 CREATE TABLE IF NOT EXISTS marque(
    code_marque INT,
    nom_marque VARCHAR(50),
+   image_marque VARCHAR(50),
    PRIMARY KEY(code_marque)
 );
 
-INSERT INTO marque VALUES (1,'Apple'),(2,'Samsung'),(3,'Xiaomi'),(4,'Oppo'),(5,'LG'),(6,'Huawei'),(3310,'Nokia');
+INSERT INTO marque VALUES (1,'Apple', 'apple.png'),(2,'Samsung', 'samsung.png'),(3,'Xiaomi', 'xiaomi.png'),(4,'Oppo', 'oppo.png'),(5,'LG', 'lg.png'),(6,'Huawei', 'huawei.png'),(3310,'Nokia', 'nokia.png');
 
 
 CREATE TABLE IF NOT EXISTS ville(
@@ -131,12 +132,12 @@ CREATE TABLE IF NOT EXISTS telephone(
    FOREIGN KEY(code_marque) REFERENCES marque(code_marque)
 );
 
-INSERT INTO telephone VALUES (1,'P30 Pro','smartphone','2005-04-19',850,'img',192,6.47,4,2,3,2,4,100),(2,'IPhone 13','smartphone','2014-09-21',850,'img',174,6,1,3,2,2,2,100),(3,'IPhone 13 Mini','smartphone','2014-09-21',850,'img',141,5,4,4,2,2,2,100),(4,'Galaxy Z Flip3','smartphone','2027-08-21',1050,'img',183,6,3,5,3,1,5,100),(5,'3310','Bi-bande GSM 900/1800','1998-01-01',65,'img',79,2,4,1,1,2,3310,100);
+INSERT INTO telephone VALUES (1,'P30 Pro','smartphone','2005-04-19',850,'p30pro.jpg',192,6.47,4,2,3,2,4,100),(2,'IPhone 13','smartphone','2014-09-21',850,'iphone13.jfif',174,6,1,3,2,2,1,100),(3,'IPhone 13 Mini','smartphone','2014-09-21',850,'iphone13.jfif',141,5,4,4,2,2,1,100),(4,'Galaxy Z Flip3','smartphone','2027-08-21',1050,'galaxyZflip3.png',183,6,3,5,3,1,2,100),(5,'3310','Bi-bande GSM 900/1800','1998-01-01',65,'3310.jpg',79,2,4,1,1,2,3310,100);
 
 
 CREATE TABLE IF NOT EXISTS panier(
    idPanier INT AUTO_INCREMENT,
-   date_ajout DATE  ,
+   date_ajout DATE   ,
    prix_unit DOUBLE,
    quantite INT,
    id_telephone INT,

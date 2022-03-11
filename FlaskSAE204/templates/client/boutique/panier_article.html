@@ -27,13 +27,11 @@
                             <td>{{itemPanier.prix_unit}}</td>
                             <td>{{ "{:,.2f} €".format((itemPanier.prix_unit * itemPanier.quantite)) }}</td>
                             <td>
-                               {% if itemPanier.stock is defined and itemPanier.stock > 0 %}
-                                <form action="/client/panier/add" style="display: inline-block;"  method="post">
+                                <form action="/client/panier/add2" style="display: inline-block;"  method="post">
                                         <input type="hidden" name="quantite" value="1">
                                         <input type="hidden" name="idPanier" value="{{ itemPanier.idPanier }}">
                                     <button class="btn btn-primary" > + </button>
                                 </form>
-                               {% endif %}
                                 <form action="/client/panier/delete"  style="display: inline-block;"  method="post">
                                     <input type="hidden" name="idPanier" value="{{ itemPanier.idPanier }}">
                                     <button class="btn btn-primary" > - </button>
@@ -79,7 +77,18 @@
                             <div class="card-body border-dark rounded">
                                 <a href="/client/article/details/{{ article.id_telephone }}">
                                 <h2 class="card-title">
-                                    <span style="color: #0b2e13">{{ article.modele }}</span><br>
+                                    <span style="color: #0b2e13">{{ article.modele }}
+
+                                        {% if article.stock < 25 and article.stock>0 %}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
+                                        {% elif article.stock < 1 %}
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+                                        {% endif %}
+
+                                    </span>
+
+                                    <br>
+
                                     {{ article.prix }}
                                     €
                                 </h2>
@@ -90,6 +99,7 @@
                                     {% endif %}
                                     <hr>
                                 </div>
+                                    {{ article.nom_marque }}
                                 </a>
                                 <div class="card-body">
                                         <form  action="/client/panier/add" method="post">
@@ -116,18 +126,18 @@
                             {% endif %}
                                 <br>
                             {% if article.nb_notes is defined %}
-                            {% if article.nb_notes > 1 %}
-                                 <a  href="/client/article/details/{{ article.id_telephone }}">
-                                    <span style="color: #3A7734"> note : {{  "{:,.1f}".format(article.moy_notes) }}</span>
-                                 </a>
-                            {% endif %}
+                                {% if article.nb_notes > 1 %}
+                                     <a  href="/client/article/details/{{ article.id_telephone }}">
+                                        <span style="color: #3A7734"> note : {{  "{:,.1f}".format(article.moy_notes) }}</span>
+                                     </a>
+                                {% endif %}
                             {% endif %}
                             {% if article.nb_avis is defined %}
-                            {% if article.nb_avis > 0 %}
-                                 <a href="/client/article/details/{{ article.id_telephone }}">
-                                    <span style="color: #3A7734">({{ article.nb_avis }} avis)</span>
-                                 </a>
-                            {% endif %}
+                                {% if article.nb_avis > 0 %}
+                                     <a href="/client/article/details/{{ article.id_telephone }}">
+                                        <span style="color: #3A7734">({{ article.nb_avis }} avis)</span>
+                                     </a>
+                                {% endif %}
                             {% endif %}
                             </div>
                         </div>

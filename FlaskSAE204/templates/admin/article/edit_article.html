@@ -5,6 +5,47 @@
 
 {% block body %}
 {#  <h2>modifier d'un article</h2>#}
+<div class="row">
+                        <div class="card col-4 mt-4">
+                            <div class="card-body border-dark rounded">
+                                <form  action="/admin/article/edit" method="post">
+                                    <input type="hidden" name="id_telephone" value="{{ article.id_telephone }}">
+                                    Modele:<br>
+                                    <div class="input-group input-group-sm" style="width: 8rem !important;">
+                                        <input type="text" class="form-control" style="width: 8rem !important;" value="{{ article.modele }}" name="modele_telephone">
+                                    </div>
+
+                                    Prix:<br>
+                                    <div class="input-group input-group-sm" style="width: 8rem !important;">
+                                        <input type="number" class="form-control" style="width: 8rem !important;" value="{{ article.prix }}" name="prix_telephone">
+                                    </div>
+
+                                    Stock:<br>
+                                    <div class="input-group input-group-sm" style="width: 8rem !important;">
+                                        <input type="number" step="1" min="0" class="form-control" style="width: 8rem !important;" value="{{ article.stock }}" name="stock_telephone">
+                                    </div>
+
+                                    <div class="card-body">
+                                         {%  if article.image_telephone is not none %}
+                                            <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/' + article['image_telephone']) }}"  alt="image  de {{ article.modele }}" >
+                                        {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ article.modele }}" >
+                                        {% endif %}
+                                        <hr>
+                                    </div>
+
+                                    <button class="btn btn-success float-right">valider l'edit</button>
+                                </form>
+
+
+
+                                </a>
+                            </div>
+                        </div>
+        </div>
+    </div>
+<br><br>
+
+
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}

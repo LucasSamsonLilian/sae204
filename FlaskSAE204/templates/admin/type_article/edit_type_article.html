@@ -10,19 +10,15 @@
   {% endif %}
   <form method="post" action="/admin/type-article/edit">
     <fieldset>
-        <legend> Modifier un type d'article</legend>
+        <legend> Modifier une marque</legend>
         <div class="mb-3">
-        <input type="hidden" name="id" size="18" value="{{ type_article.id }}" id="id">
-        <label for="libelle">libellé</label><br>
+        <input type="hidden" name="code_marque" size="18" value="{{ type_article.code_marque }}" id="id">
 
-        <input class="form-select" type="text" name="libelle" size="18" value="{{ type_article.libelle }}" id="libelle"><br>
+        <input class="form-select" type="text" name="nom_marque" size="18" value="{{ type_article.nom_marque }}" id="nom_marque"><br>
         </div>
         <div class="col-12">
         <button class="btn btn-primary" type="submit">Valider</button>
         </div>
-{#        <input type="submit" value="Modifier" name="Modifier" >#}
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
     </fieldset>
   </form>
 {% endblock %}

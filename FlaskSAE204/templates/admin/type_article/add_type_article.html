@@ -6,6 +6,37 @@
 
 {% block body %}
 {#  <h2>ajout d'un type d'article</h2>#}
+<div class="card col-4 mt-4">
+        <div class="card-body border-dark rounded">
+            <form  action="/admin/type-article/add" method="post">
+                <input type="hidden" name="id_telephone" value="">
+                Nom:<br>
+                <div class="input-group input-group-sm" style="width: 8rem !important;">
+                    <input required type="text" class="form-control" style="width: 8rem !important;" value="" name="nom_marque">
+                </div>
+
+
+                <br><br>
+                <div class="bg-warning">
+                    Image: <br>(en cours de developpement... p_p)<br>
+                        <input type="file" name="picture">
+                </div>
+                <br>
+
+                <button class="btn btn-success float-left">Valider</button>
+            </form>
+
+            <a href="/admin/type-article/show">
+                <button class="btn btn-danger float-left">Annulez</button>
+            </a>
+        </div>
+</div>
+
+
+
+
+
+
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}

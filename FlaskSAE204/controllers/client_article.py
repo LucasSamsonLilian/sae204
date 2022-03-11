@@ -24,7 +24,6 @@ def client_article_show():                                 # remplace client_ind
     mycursor.execute(sql, client_id)
     panier = mycursor.fetchall()
     articles_panier = panier
-    print (panier)
 
     sql="SELECT SUM(panier.prix_unit * panier.quantite) as total FROM panier WHERE idUser=%s"
     mycursor.execute(sql, client_id)
@@ -38,24 +37,29 @@ def client_article_show():                                 # remplace client_ind
     telephone = mycursor.fetchall()
     articles = telephone
 
+    for article in articles:
+        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s",(article['code_marque']))
+        marque = mycursor.fetchone()
+        article['nom_marque'] = marque.get('nom_marque')
+
+
 
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=types_articles)
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):
     mycursor = get_db().cursor()
-    commentaires=None
+    client_id = session['user_id']
 
     sql = "SELECT * FROM telephone WHERE id_telephone=%s"
     mycursor.execute(sql, id)
     telephone = mycursor.fetchone()
     article = telephone
 
-    mycursor.execute("SELECT panier.idPanier FROM panier WHERE idUser=%s", (id))
-    idPanier = mycursor.fetchone()
 
-    sql = "SELECT * FROM commande WHERE idPanier=%s"
-    mycursor.execute(sql, idPanier)
-    commandes_articles = mycursor.fetchall()
+    sql="SELECT * FROM ligneCommande INNER JOIN commande ON commande.idCommande = ligneCommande.commande_id WHERE commande.idUser=%s"
+    mycursor.execute(sql, client_id)
+    commandes_articles=mycursor.fetchall()
+    commentaires=[]
 
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)
