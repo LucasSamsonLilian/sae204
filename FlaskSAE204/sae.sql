@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS pays(
 
 INSERT INTO pays VALUES (null,'France',2.0),
                         (null,'Allemagne',3.5),
-                        (null,'Angleterre',8.0);
+                        (null,'Angleterre',8.1);
 
 SELECT * FROM pays;
 
