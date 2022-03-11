@@ -1,0 +1,7 @@
+-- Faire table pays --
+faire page "mes coordonné" sur client
+ajouter champ adresse et pays dans client
+mettre dans les commande admin l'adresse de livraison donc adresse du client (car livraison a domicile)
+(si on a le temps faire une table point relai et pouvoir choisir entre livraison a domicile et livraison point relai bien evidemment cela changera le prix de livraison)
+frais de livraison qui augmente selon le pays
+le site livrera seulement dans les pays renseigné dans la base de données.
