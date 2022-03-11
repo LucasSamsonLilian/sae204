@@ -186,4 +186,4 @@ INSERT INTO userC (idUser, email, username, password, role,  est_actif,codePays)
 INSERT INTO userC  (idUser, email, username, password, role, est_actif,codePays) VALUES
 (NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,2);
 INSERT INTO userC  (idUser, email, username, password, role,  est_actif,codePays) VALUES
-(NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1,3);
+(NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1,2);
