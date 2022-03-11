@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS  stockage;
 DROP TABLE IF EXISTS ram;
 DROP TABLE IF EXISTS  couleur;
 DROP TABLE IF EXISTS  marque;
+DROP TABLE IF EXISTS pays;
 
 CREATE TABLE IF NOT EXISTS stockage(
    id_stockage INT AUTO_INCREMENT,
@@ -67,6 +68,18 @@ CREATE TABLE IF NOT EXISTS fournisseur(
 
 INSERT INTO fournisseur VALUES (1,'telemago','84 place de Lesage Bourgeoisdan'),(2,'telephonarabe','83 place Odette Legendre Humbertboeuf'),(3,'telemagouille','17 boulevard de Roger Antoine'),(4,'telemacron','39 chemin de Lebon Coulonnec'),(5,'teleferry','45 place Jean Maillot Boulanger');
 
+CREATE TABLE IF NOT EXISTS pays(
+    codePays INT AUTO_INCREMENT,
+    libelle VARCHAR(50),
+    taxe DECIMAL(7,2),
+    PRIMARY KEY (codePays)
+);
+
+INSERT INTO pays VALUES (null,'France',2.0),
+                        (null,'Allemagne',3.5),
+                        (null,'Angleterre',8.0);
+
+SELECT * FROM pays;
 
 CREATE TABLE IF NOT EXISTS userC(
    idUser INT AUTO_INCREMENT,
@@ -76,12 +89,15 @@ CREATE TABLE IF NOT EXISTS userC(
    role VARCHAR(50),
    est_actif BOOLEAN,
    adresse VARCHAR(50),
+   codePays INT NOT NULL,
+   CONSTRAINT fk_pays_telephone
+   FOREIGN KEY(codePays) REFERENCES pays(codePays),
    PRIMARY KEY(idUser)
 );
 
 CREATE TABLE IF NOT EXISTS etat(
-   idEtat INT NOT NULL AUTO_INCREMENT,
-   libelle VARCHAR(50),
+    idEtat INT NOT NULL AUTO_INCREMENT,
+    libelle VARCHAR(50),
     PRIMARY KEY (idEtat)
 );
 
@@ -164,9 +180,9 @@ CREATE TABLE IF NOT EXISTS seSitue(
    FOREIGN KEY(code_ville) REFERENCES ville(code_ville)
 );
 
-INSERT INTO userC (idUser, email, username, password, role,  est_actif) VALUES
-(NULL, 'admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1);
-INSERT INTO userC  (idUser, email, username, password, role, est_actif) VALUES
-(NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1);
-INSERT INTO userC  (idUser, email, username, password, role,  est_actif) VALUES
-(NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1);
+INSERT INTO userC (idUser, email, username, password, role,  est_actif,codePays) VALUES
+(NULL, 'admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1,1);
+INSERT INTO userC  (idUser, email, username, password, role, est_actif,codePays) VALUES
+(NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,2);
+INSERT INTO userC  (idUser, email, username, password, role,  est_actif,codePays) VALUES
+(NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1,3);
