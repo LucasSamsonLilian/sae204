@@ -95,8 +95,6 @@ def client_panier_delete():
 
     get_db().commit()
 
-
-
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
@@ -138,6 +136,11 @@ def client_panier_filtre():
     filter_prix_min = request.form.get('filter_prix_min', None)
     filter_prix_max = request.form.get('filter_prix_max', None)
     filter_types = request.form.getlist('filter_types', None)
+    session['word'] = filter_word
+    session['prix_min'] = filter_prix_min
+    session['prix_max'] = filter_prix_max
+    session['code_marque'] = filter_types[0]
+
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
@@ -145,10 +148,15 @@ def client_panier_filtre():
 
 @client_panier.route('/client/panier/filtre/suppr', methods=['POST'])
 def client_panier_filtre_suppr():
-    session.pop('filter_word', None)
-    session.pop('filter_prix_min', None)
-    session.pop('filter_prix_max', None)
-    session.pop('filter_types', None)
+    #session.pop('word', None)
+    # session.pop('prix_min', None)
+    # session.pop('prix_max', None)
+    # session.pop('code_marque', None)
+
+    session['word'] = None
+    session['prix_min'] = None
+    session['prix_max'] = None
+    session['code_marque'] = None
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))

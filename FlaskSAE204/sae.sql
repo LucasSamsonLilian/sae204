@@ -1,5 +1,6 @@
 SET GLOBAL local_infile=1;
 
+DROP TABLE IF EXISTS  commentaire;
 DROP TABLE IF EXISTS  ligneCommande;
 DROP TABLE IF EXISTS  commande;
 DROP TABLE IF EXISTS  panier;
@@ -171,3 +172,17 @@ INSERT INTO userC  (idUser, email, username, password, role, est_actif) VALUES
 (NULL, 'client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1);
 INSERT INTO userC  (idUser, email, username, password, role,  est_actif) VALUES
 (NULL, 'client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client',1);
+
+CREATE TABLE IF NOT EXISTS commentaire(
+   id_commentaire INT AUTO_INCREMENT,
+   commentaire VARCHAR(250),
+   note INT,
+   nomUser VARCHAR(50),
+   telephone_id INT,
+   user_id INT,
+   PRIMARY KEY(id_commentaire),
+   CONSTRAINT fk_commentaire_Telephone
+   FOREIGN KEY(telephone_id) REFERENCES Telephone(id_telephone),
+   CONSTRAINT fk_commentaire_userC
+   FOREIGN KEY(user_id) REFERENCES userC(idUser)
+);
