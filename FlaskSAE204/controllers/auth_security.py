@@ -34,10 +34,6 @@ def auth_login_post():
             session['username'] = user['username']
             session['role'] = user['role']
             session['user_id'] = user['idUser']
-            session['word'] = None
-            session['prix_min'] = None
-            session['prix_max'] = None
-            session['code_marque'] = None
             if user['role'] == 'ROLE_admin':
                 return redirect('/admin/commande/index')
             else:
@@ -79,17 +75,9 @@ def auth_signup_post():
     session.pop('username', None)
     session.pop('role', None)
     session.pop('user_id', None)
-    session.pop('word', None)
-    session.pop('prix_min', None)
-    session.pop('prix_max', None)
-    session.pop('code_marque', None)
     session['username'] = username
     session['role'] = 'ROLE_client'
     session['user_id'] = user_id
-    session['word'] = None
-    session['prix_min'] = None
-    session['prix_max'] = None
-    session['code_marque'] = None
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 

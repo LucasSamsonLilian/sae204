@@ -74,18 +74,19 @@
 
         <div class="row">
                 {% for article in articles  %}
+                    {% if article.show %}
                         <div class="card col-4 mt-4">
                             <div class="card-body border-dark rounded">
                                 <a href="/client/article/details/{{ article.id_telephone }}">
                                 <h2 class="card-title">
                                     <span style="color: #0b2e13">{{ article.modele }}
-
+                                    {% if article is defined %}
                                         {% if article.stock < 25 and article.stock>0 %}
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
                                         {% elif article.stock < 1 %}
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
                                         {% endif %}
-
+                                    {% endif %}
                                     </span>
 
                                     <br>
@@ -111,7 +112,7 @@
                                              </button>
 
                                             <div class="input-group input-group-sm" style="width: 4rem !important;">
-                                                <input type="number" id="input-{{ article.id_telephone }}" step="1" min="0" max="{{ article.stock }}" class="form-control" style="width: 4rem !important;" value="1" name="quantite">
+                                                <input type="number" id="input-{{ article.id_telephone }}" step="1" min="0" class="form-control" style="width: 4rem !important;" value="1" name="quantite">
                                             </div>
 
                                         </form>
@@ -142,6 +143,7 @@
                             {% endif %}
                             </div>
                         </div>
+                    {% endif %}
                 {% endfor %}
         </div>
     </div>

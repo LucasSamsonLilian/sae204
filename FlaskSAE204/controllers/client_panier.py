@@ -31,20 +31,32 @@ def client_panier_add():
     mycursor.execute("SELECT telephone.stock FROM Telephone WHERE id_telephone = %s", (id_article))
     stock = mycursor.fetchone()
 
+    mycursor.execute("SELECT SUM(panier.quantite) as qte FROM panier WHERE id_telephone = %s",(id_article))
+    stock_non_dispo=mycursor.fetchone()
+
+    if(stock_non_dispo['qte'] is not None):
+        stock_vrai=stock['stock']-stock_non_dispo['qte']
+    else:
+        stock_vrai=stock['stock']
+
+    print(type(stock['stock'])," ", stock['stock'])
     date=datetime.datetime.now()
 
     if stock['stock']>=1:
-        if not (article_panier is None) and article_panier['quantite'] >= 1:
-            tuple_update_panier = (quantite, client_id, id_article)
-            sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
-            mycursor.execute(sql, tuple_update_panier)
+        if stock_vrai>=int(quantite):
+            if not (article_panier is None) and article_panier['quantite'] >= 1:
+                tuple_update_panier = (quantite, client_id, id_article)
+                sql = "UPDATE panier SET quantite = quantite+%s WHERE idUser = %s AND id_telephone=%s"
+                mycursor.execute(sql, tuple_update_panier)
+            else:
+                tuple_insert = (date, prix['prix'],quantite,id_article,client_id,nom['modele'] )
+                sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
+                mycursor.execute(sql, tuple_insert)
+            get_db().commit()
         else:
-            tuple_insert = (date, prix['prix'],quantite,id_article,client_id,nom['modele'] )
-            sql = "INSERT INTO panier(date_ajout,prix_unit,quantite,id_telephone,idUser,nom) VALUES (%s,%s,%s,%s,%s,%s)"
-            mycursor.execute(sql, tuple_insert)
-        get_db().commit()
+            flash(u'Trop de commande pour ce téléphone, veuillez réessayer dans quelques jours')
     else:
-        flash(u'Pas de\' telephone de ce type dans nos stock')
+        flash(u'Nous n\'avons plus de téléphone de ce type dans nos stock')
 
 
 
@@ -64,6 +76,8 @@ def client_panier_add2():
     mycursor.execute(sql, (id_panier, client_id))
     id_article= mycursor.fetchone()
 
+    mycursor.execute("SELECT SUM(panier.quantite) as qte FROM panier WHERE id_telephone = %s", (id_article))
+    stock_non_dispo = mycursor.fetchone()
 
     tuple_update_panier = (quantite ,client_id, id_article['id'])
     sql = "UPDATE panier SET quantite=quantite+%s WHERE idUser = %s AND id_telephone=%s"
@@ -136,10 +150,14 @@ def client_panier_filtre():
     filter_prix_min = request.form.get('filter_prix_min', None)
     filter_prix_max = request.form.get('filter_prix_max', None)
     filter_types = request.form.getlist('filter_types', None)
-    session['word'] = filter_word
-    session['prix_min'] = filter_prix_min
-    session['prix_max'] = filter_prix_max
-    session['code_marque'] = filter_types[0]
+    if(filter_word is not None):
+        session['word'] = filter_word
+    if (filter_prix_min is not None):
+        session['prix_min'] = filter_prix_min
+    if (filter_prix_max is not None):
+        session['prix_max'] = filter_prix_max
+    if (filter_types is not None and int(filter_types[0])>0):
+        session['code_marque'] = filter_types[0]
 
 
     return redirect('/client/article/show')
@@ -148,15 +166,10 @@ def client_panier_filtre():
 
 @client_panier.route('/client/panier/filtre/suppr', methods=['POST'])
 def client_panier_filtre_suppr():
-    #session.pop('word', None)
-    # session.pop('prix_min', None)
-    # session.pop('prix_max', None)
-    # session.pop('code_marque', None)
-
-    session['word'] = None
-    session['prix_min'] = None
-    session['prix_max'] = None
-    session['code_marque'] = None
+    session.pop('word', None)
+    session.pop('prix_min', None)
+    session.pop('prix_max', None)
+    session.pop('code_marque', None)
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))

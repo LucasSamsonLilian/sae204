@@ -28,42 +28,52 @@ def client_article_show():                                 # remplace client_ind
     prix_totalListe = mycursor.fetchone()
     prix_total=(prix_totalListe['total'])
 
+    mycursor.execute("SELECT * FROM marque")
+    marque_filtre = mycursor.fetchall()
 
-    if (session['code_marque'] is not None and session['prix_min'] is not None):
-        if (session['prix_max'] is not None):
-            if(session['word'] is not None):
-                tuple_filter=(session['code_marque'], session['prix_min'], session['prix_max'], session['word'])
-                print(tuple_filter)
-                sql="SELECT * FROM Telephone WHERE code_marque = %s and prix >= %s and prix <= %s and modele LIKE %s"
-                mycursor.execute(sql, tuple_filter)
-                articles=mycursor.fetchall()
-            else:
-                tuple_filter = (session['code_marque'], session['prix_min'], session['prix_max'])
-                print(tuple_filter)
-                sql = "SELECT * FROM Telephone WHERE code_marque = %s and prix >= %s and prix <= %s"
-                mycursor.execute(sql, tuple_filter)
-                articles = mycursor.fetchall()
-        else:
-            tuple_filter = (session['code_marque'], session['prix_min'])
-            print(tuple_filter)
-            sql = "SELECT * FROM Telephone WHERE code_marque = %s and prix >= %s"
-            mycursor.execute(sql, tuple_filter)
-            articles = mycursor.fetchall()
-    else:
-        mycursor.execute("SELECT * FROM telephone")
-        telephone = mycursor.fetchall()
-        articles = telephone
+    mycursor.execute("SELECT * FROM telephone")
+    articles = mycursor.fetchall()
 
+    if 'word' in session:
+        mycursor.execute("SELECT * FROM telephone WHERE modele LIKE %s", ("%"+session["word"]+"%"))
+        articles = mycursor.fetchall()
 
 
 
     for article in articles:
-        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s",(article['code_marque']))
+        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s", (article['code_marque']))
         marque = mycursor.fetchone()
         article['nom_marque'] = marque.get('nom_marque')
+        article['show'] = True
 
-    mycursor.execute("SELECT * FROM marque")
-    marque_filtre = mycursor.fetchall()
+
+    if('code_marque' in session):
+        for article in articles:
+            x=article['code_marque']
+            y=session['code_marque']
+            if(int(y)>0 and int(x)==int(y) and article['show']):
+                article['show'] = True
+            else:
+                article['show'] = False
+
+    if ('prix_min' in session):
+        for article in articles:
+            x = article['prix']
+            y = session['prix_min']
+            if (y is not None and int(x) >= int(y) and article['show']):
+                article['show'] = True
+            else:
+                article['show'] = False
+
+    if ('prix_max' in session):
+        for article in articles:
+            x = article['prix']
+            y = session['prix_max']
+            if (y is not None and int(x) <= int(y) and article['show']):
+                article['show'] = True
+            else:
+                article['show'] = False
+
 
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=marque_filtre)
 
