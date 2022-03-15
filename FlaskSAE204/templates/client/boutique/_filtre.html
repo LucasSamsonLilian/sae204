@@ -1,45 +1,51 @@
 <form method="post"  action="/client/panier/filtre"   style="display: inline-block">
-    <div class="form-group">
-        <input name="filter_word"  type="text" placeholder="Recherche" size="10" class="form-control"
-               value="{% if session['word'] %}{{ session['word'] }}{% endif %}"  >
-    </div>
-   {% if itemsFiltre is defined %}
-    <div class="form-group">
-        <h4>Les Marsques disponibles:</h4>
-        {% if not session['code_marque'] %}
-        <input type="radio" name="filter_types" value="0" checked>pas de marque<br>
+    <div class="row">
+        <div class="form-group col">
+            <h4>Nom de l'article :</h4>
+            <input name="filter_word"  type="text" placeholder="Recherche" size="10" class="form-control"
+                   value="{% if session['word'] %}{{ session['word'] }}{% endif %}"  >
+        </div>
+       {% if itemsFiltre is defined %}
+        <div class="form-group col">
+            <h4>Les Marsques disponibles:</h4>
+            {% if not session['code_marque'] %}
+                <input type="radio" name="filter_types" value="0" checked>pas de marque<br>
+            {% endif %}
+            {% for itemFiltre in itemsFiltre %}
+            <input type="radio" name="filter_types" value="{{ itemFiltre.code_marque }}"
+                   {% set idItem = itemFiltre.code_marque | string %}
+                   {% if session['code_marque'] %}
+                       {{ ' checked ' if (idItem in session['code_marque']) else '' }}
+                   {% endif %}
+
+                >  {{ itemFiltre.nom_marque }}
+                <br>
+            {% endfor %}
+        </div>
         {% endif %}
-        {% for itemFiltre in itemsFiltre %}
-        <input type="radio" name="filter_types" value="{{ itemFiltre.code_marque }}"
-               {% set idItem = itemFiltre.code_marque | string %}
-               {% if session['code_marque'] %}
-                   {{ ' checked ' if (idItem in session['code_marque']) else '' }}
-               {% endif %}
 
-            >  {{ itemFiltre.nom_marque }}
-            <br>
-        {% endfor %}
+        <div class="form-group col">
+            <h5>Prix :</h5><br>
+                <span>min</span>
+                <input class="form-control" name="filter_prix_min"  type="number" placeholder="min"  size="3"
+                value="{% if session['prix_min'] %}{{ session['prix_min'] }}{% else %}0{% endif %}" ><br>
+                <span>max</span>
+                <input class="form-control" name="filter_prix_max"  type="number" placeholder="max"  size="3"
+                 value="{% if session['prix_max'] %}{{ session['prix_max'] }}{% else %}999990{% endif %}" >
+        </div>
     </div>
-    {% endif %}
-
-    <div class="form-group">
-        <h5>Prix :</h5><br>
-            <span>min</span>
-            <input class="form-control" name="filter_prix_min"  type="number" placeholder="min"  size="3"
-            value="{% if session['prix_min'] %}{{ session['prix_min'] }}{% else %}0{% endif %}" ><br>
-            <span>max</span>
-            <input class="form-control" name="filter_prix_max"  type="number" placeholder="max"  size="3"
-             value="{% if session['prix_max'] %}{{ session['prix_max'] }}{% else %}999990{% endif %}" >
+    <div class="row">
+        {% if not(session['word'] or session['prix_max'] or session['prix_min'] or session['code_marque']) %}
+            <button type="submit" class="btn btn-primary" style="display: inline-block;">Filtrer</button>
+        {% endif %}
     </div>
-    {% if not(session['word'] or session['prix_max'] or session['prix_min'] or session['code_marque']) %}
-        <button type="submit" class="btn btn-primary" style="display: inline-block;">Filtrer</button>
-    {% endif %}
 </form>
 <br>
+<div class="row">
 {% if session['word'] or session['prix_max'] or session['prix_min'] or session['code_marque']%}
     <form  action="/client/panier/filtre/suppr"  style="display: inline-block;"  method="post" >
         <button class="btn btn-primary" > Supprimer filtre </button>
     </form>
 {% endif %}
-
+</div>
 
