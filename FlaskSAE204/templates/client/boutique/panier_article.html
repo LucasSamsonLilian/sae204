@@ -4,9 +4,26 @@
         <div class="row align-self-right">
             <div class="col-7">
                 <br>
+            {% if articlesPanier | length <1 %}
+                <h3>Liste des articles dans mon panier</h3>
+                <table class="table table-hover table-responsive bg-light">
+                    <tr>
+                        <th style="width: 300px">Nom</th>
+                        <th style="width: 50px">Quantité</th>
+                        <th style="width: 50px">Prix</th>
+                        <th style="width: 100px">Sous-Total</th>
+                        <th style="width: 400px">Action</th>
+                    </tr>
+                        <td>Pas d'articles dans votre panier pour le moments</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                </table>
+            {% endif %}
             {% if articlesPanier | length >= 1 %}
                 <h3>Liste des articles dans mon panier</h3>
-                <table class="table table-hover table-responsive">
+                <table class="table table-hover table-responsive bg-light">
                     <tr>
                         <th style="width: 300px">Nom</th>
                         <th style="width: 50px">Quantité</th>
