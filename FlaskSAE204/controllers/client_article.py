@@ -44,6 +44,17 @@ def client_article_show():                                 # remplace client_ind
         mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s", (article['code_marque']))
         marque = mycursor.fetchone()
         article['nom_marque'] = marque.get('nom_marque')
+
+        mycursor.execute("SELECT COUNT(commentaire) as nb FROM commentaire WHERE telephone_id = %s", (article['id_telephone']))
+        nb_notes=mycursor.fetchone()
+        article['nb_notes']=nb_notes.get('nb')
+
+        mycursor.execute("SELECT SUM(note) as moy_note FROM commentaire WHERE telephone_id = %s", (article['id_telephone']))
+        moy=mycursor.fetchone()
+        if(moy.get('moy_note') is not None and moy.get('moy_note') >0):
+            article['moy_notes']=moy.get('moy_note')/nb_notes.get('nb')
+        else:
+            article['moy_notes']="pas de note pour cette article"
         article['show'] = True
 
 
