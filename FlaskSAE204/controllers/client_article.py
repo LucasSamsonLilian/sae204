@@ -51,7 +51,7 @@ def client_article_show():                                 # remplace client_ind
 
         mycursor.execute("SELECT SUM(note) as moy_note FROM commentaire WHERE telephone_id = %s", (article['id_telephone']))
         moy=mycursor.fetchone()
-        if(moy.get('moy_note') is not None and moy.get('moy_note') >0):
+        if(moy.get('moy_note') is not None and moy.get('moy_note') >=0):
             article['moy_notes']=moy.get('moy_note')/nb_notes.get('nb')
         else:
             article['moy_notes']="pas de note pour cette article"
