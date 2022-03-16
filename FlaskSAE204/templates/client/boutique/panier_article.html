@@ -3,22 +3,7 @@
     <div class="container">
         <div class="row align-self-right">
             <div class="col-7">
-             {% if articlePanier | length < 1 %}
-                <table class="table table-hover table-responsive">
-                    <tr>
-                        <th style="width: 300px">Nom</th>
-                        <th style="width: 50px">Quantité</th>
-                        <th style="width: 50px">Prix</th>
-                        <th style="width: 100px">Sous-Total</th>
-                        <th style="width: 400px">Action</th>
-                    </tr>
-                        <td>Pas de commande actuelement </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                </table>
-            {% endif %}
+                <br>
             {% if articlesPanier | length >= 1 %}
                 <h3>Liste des articles dans mon panier</h3>
                 <table class="table table-hover table-responsive">
@@ -29,13 +14,6 @@
                         <th style="width: 100px">Sous-Total</th>
                         <th style="width: 400px">Action</th>
                     </tr>
-                    {% if articlesPanier is None %}
-                        <td>Votre panier est vide</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    {% else %}
                     {% for itemPanier in articlesPanier %}
                         <tr>
                             <td>{{itemPanier.nom}}</td>
@@ -61,7 +39,7 @@
                             </td>
                         </tr>
                     {% endfor %}
-                    {% endif %}
+
                 </table>
                     <form action="/client/panier/vider" style="display: inline-block;"  method="post" >
                         <button class="btn btn-primary"  > Éffacer tout </button>
@@ -70,20 +48,19 @@
                         <button class="btn btn-primary" > Passer ma commande </button>
                     </form>
                     {% if prix_total %}
-                    Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
+                        Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
                     {% endif %}
-            {% endif %}
+                {% endif %}
             </div>
 
 
-            <div class="col">
-              <h3>Les filtres:</h3>
+            <div class="col"><br>
+              <h3 class="bg-light rounded">Les filtres:</h3>
               <br>
                  {% include('client/boutique/_filtre.html') %}
             </div>
-
         </div>
-
+        <br>
         <div class="bg-light p-3">
             <h1>Les articles</h1>
         </div>
@@ -163,4 +140,5 @@
                 {% endfor %}
         </div>
     </div>
+    <br>
 {% endblock %}

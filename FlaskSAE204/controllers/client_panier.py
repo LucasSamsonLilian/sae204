@@ -76,13 +76,24 @@ def client_panier_add2():
     mycursor.execute(sql, (id_panier, client_id))
     id_article= mycursor.fetchone()
 
-    mycursor.execute("SELECT SUM(panier.quantite) as qte FROM panier WHERE id_telephone = %s", (id_article))
+    mycursor.execute("SELECT telephone.stock as stock FROM telephone WHERE id_telephone=%s", (id_article['id']))
+    stock = mycursor.fetchone()
+
+    mycursor.execute("SELECT SUM(panier.quantite) as qte FROM panier WHERE id_telephone = %s", (id_article['id']))
     stock_non_dispo = mycursor.fetchone()
 
-    tuple_update_panier = (quantite ,client_id, id_article['id'])
-    sql = "UPDATE panier SET quantite=quantite+%s WHERE idUser = %s AND id_telephone=%s"
-    mycursor.execute(sql, tuple_update_panier)
-    get_db().commit()
+    if (stock_non_dispo['qte'] is not None):
+        stock_vrai = stock['stock'] - stock_non_dispo['qte']
+    else:
+        stock_vrai = stock['stock']
+
+    if(1<=stock_vrai):
+        tuple_update_panier = (quantite ,client_id, id_article['id'])
+        sql = "UPDATE panier SET quantite=quantite+%s WHERE idUser = %s AND id_telephone=%s"
+        mycursor.execute(sql, tuple_update_panier)
+        get_db().commit()
+    else:
+        flash(u'Trop de commande pour ce téléphone, veuillez réessayer dans quelques jours')
 
     return redirect('/client/article/show')
 
