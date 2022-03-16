@@ -53,13 +53,9 @@ def valid_add_article():
 
 
 
-
-    mycursor.execute("SELECT COUNT(*)+1 as id FROM Telephone")
-    id=mycursor.fetchone()
-
     date = datetime.datetime.now()
 
-    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(id['id'], modele, 'telephone', date, prix,modele, poids, taille, ram, stockage, fournisseur, 1, marque, stock ))
+    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(None, modele, 'telephone', date, prix,modele, poids, taille, ram, stockage, fournisseur, 1, marque, stock ))
     mycursor.fetchone()
 
     get_db().commit()
