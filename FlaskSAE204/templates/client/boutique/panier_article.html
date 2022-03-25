@@ -3,9 +3,10 @@
     <div class="container">
         <div class="row align-self-right">
             <div class="col-7">
-            {% if articlesPanier | length >= 1 %}
+                <br>
+            {% if articlesPanier | length <1 %}
                 <h3>Liste des articles dans mon panier</h3>
-                <table class="table table-hover table-responsive">
+                <table class="table table-hover table-responsive bg-light">
                     <tr>
                         <th style="width: 300px">Nom</th>
                         <th style="width: 50px">Quantité</th>
@@ -13,13 +14,23 @@
                         <th style="width: 100px">Sous-Total</th>
                         <th style="width: 400px">Action</th>
                     </tr>
-                    {% if monPanier is defined %}
-                        <td>Votre panier est vide</td>
+                        <td>Pas d'articles dans votre panier pour le moments</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                    {% else %}
+                </table>
+            {% endif %}
+            {% if articlesPanier | length >= 1 %}
+                <h3>Liste des articles dans mon panier</h3>
+                <table class="table table-hover table-responsive bg-light">
+                    <tr>
+                        <th style="width: 300px">Nom</th>
+                        <th style="width: 50px">Quantité</th>
+                        <th style="width: 50px">Prix</th>
+                        <th style="width: 100px">Sous-Total</th>
+                        <th style="width: 400px">Action</th>
+                    </tr>
                     {% for itemPanier in articlesPanier %}
                         <tr>
                             <td>{{itemPanier.nom}}</td>
@@ -32,6 +43,7 @@
                                         <input type="hidden" name="idPanier" value="{{ itemPanier.idPanier }}">
                                     <button class="btn btn-primary" > + </button>
                                 </form>
+
                                 <form action="/client/panier/delete"  style="display: inline-block;"  method="post">
                                     <input type="hidden" name="idPanier" value="{{ itemPanier.idPanier }}">
                                     <button class="btn btn-primary" > - </button>
@@ -44,7 +56,7 @@
                             </td>
                         </tr>
                     {% endfor %}
-                    {% endif %}
+
                 </table>
                     <form action="/client/panier/vider" style="display: inline-block;"  method="post" >
                         <button class="btn btn-primary"  > Éffacer tout </button>
@@ -53,38 +65,38 @@
                         <button class="btn btn-primary" > Passer ma commande </button>
                     </form>
                     {% if prix_total %}
-                    Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
+                        Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
                     {% endif %}
-            {% endif %}
+                {% endif %}
             </div>
 
 
-            <div class="col">
-              <h3>Les filtres</h3>
-              Articles dont le nom est composé par :<br>
+            <div class="col"><br>
+              <h3 class="bg-light rounded">Les filtres:</h3>
+              <br>
                  {% include('client/boutique/_filtre.html') %}
             </div>
-
         </div>
-
+        <br>
         <div class="bg-light p-3">
             <h1>Les articles</h1>
         </div>
 
         <div class="row">
                 {% for article in articles  %}
+                    {% if article.show %}
                         <div class="card col-4 mt-4">
                             <div class="card-body border-dark rounded">
                                 <a href="/client/article/details/{{ article.id_telephone }}">
                                 <h2 class="card-title">
                                     <span style="color: #0b2e13">{{ article.modele }}
-
+                                    {% if article is defined %}
                                         {% if article.stock < 25 and article.stock>0 %}
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>
                                         {% elif article.stock < 1 %}
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
                                         {% endif %}
-
+                                    {% endif %}
                                     </span>
 
                                     <br>
@@ -110,7 +122,7 @@
                                              </button>
 
                                             <div class="input-group input-group-sm" style="width: 4rem !important;">
-                                                <input type="number" id="input-{{ article.id_telephone }}" step="1" min="0" max="{{ article.stock }}" class="form-control" style="width: 4rem !important;" value="1" name="quantite">
+                                                <input type="number" id="input-{{ article.id_telephone }}" step="1" min="0" class="form-control" style="width: 4rem !important;" value="1" name="quantite">
                                             </div>
 
                                         </form>
@@ -126,22 +138,20 @@
                             {% endif %}
                                 <br>
                             {% if article.nb_notes is defined %}
-                                {% if article.nb_notes > 1 %}
+                                    {% if article.nb_notes > 0 %}
                                      <a  href="/client/article/details/{{ article.id_telephone }}">
-                                        <span style="color: #3A7734"> note : {{  "{:,.1f}".format(article.moy_notes) }}</span>
+                                        <span style="color: #3A7734"> note : {{ article.moy_notes }}</span>
                                      </a>
-                                {% endif %}
-                            {% endif %}
-                            {% if article.nb_avis is defined %}
-                                {% if article.nb_avis > 0 %}
+                                    {% endif %}
                                      <a href="/client/article/details/{{ article.id_telephone }}">
-                                        <span style="color: #3A7734">({{ article.nb_avis }} avis)</span>
+                                        <span style="color: #3A7734">({{ article.nb_notes }} avis)</span>
                                      </a>
-                                {% endif %}
                             {% endif %}
                             </div>
                         </div>
+                    {% endif %}
                 {% endfor %}
         </div>
     </div>
+    <br>
 {% endblock %}

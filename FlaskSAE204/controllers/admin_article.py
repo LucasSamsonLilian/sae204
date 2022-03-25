@@ -53,13 +53,9 @@ def valid_add_article():
 
 
 
-
-    mycursor.execute("SELECT COUNT(*)+1 as id FROM Telephone")
-    id=mycursor.fetchone()
-
     date = datetime.datetime.now()
 
-    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(id['id'], modele, 'telephone', date, prix,modele, poids, taille, ram, stockage, fournisseur, 1, marque, stock ))
+    mycursor.execute("INSERT INTO Telephone VALUE (%s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s )",(None, modele, 'telephone', date, prix,modele, poids, taille, ram, stockage, fournisseur, 1, marque, stock ))
     mycursor.fetchone()
 
     get_db().commit()
@@ -86,6 +82,34 @@ def delete_article():
         flash(u'cet article ne peut etre supprimé')
     return redirect(url_for('admin_article.show_article'))
 
+@admin_article.route('/admin/comment/delete', methods=['POST'])
+def delete_comment():
+    # id = request.args.get('id', '')
+    mycursor = get_db().cursor()
+    article_id = request.form.get('idArticle', None)
+    id_user = request.form.get('idUser', None)
+    id_comm = request.form.get('idAvis', None)
+
+    mycursor.execute("DELETE FROM commentaire WHERE id_commentaire = %s AND user_id = %s AND telephone_id = %s",(id_comm, id_user, article_id))
+    mycursor.fetchone()
+
+    get_db().commit()
+
+    sql = "SELECT * FROM Telephone WHERE id_telephone = %s"
+    mycursor.execute(sql, article_id)
+    article = mycursor.fetchone()
+
+    sql = "SELECT * FROM commentaire WHERE telephone_id = %s"
+    mycursor.execute(sql, article_id)
+    commentaires = mycursor.fetchall()
+
+    types_articles = None
+    return render_template('admin/article/edit_article.html', article=article, types_articles=types_articles, commentaires=commentaires)
+
+
+    ##return redirect(url_for('admin_article.edit_article'))
+
+
 @admin_article.route('/admin/article/edit/<int:id>', methods=['GET'])
 def edit_article(id):
     mycursor = get_db().cursor()
@@ -93,8 +117,12 @@ def edit_article(id):
     mycursor.execute(sql, id)
     article = mycursor.fetchone()
 
+    sql = "SELECT * FROM commentaire WHERE telephone_id = %s"
+    mycursor.execute(sql, id)
+    commentaires = mycursor.fetchall()
+
     types_articles = None
-    return render_template('admin/article/edit_article.html', article=article, types_articles=types_articles)
+    return render_template('admin/article/edit_article.html', article=article, types_articles=types_articles, commentaires=commentaires)
 
 @admin_article.route('/admin/article/edit', methods=['POST'])
 def valid_edit_article():

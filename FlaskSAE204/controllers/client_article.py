@@ -14,10 +14,8 @@ client_article = Blueprint('client_article', __name__,
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
 
-    # select type_article
-    types_articles = []
-
     client_id = session['user_id']
+
 
 
     sql = "SELECT * FROM panier WHERE idUser=%s"
@@ -30,21 +28,65 @@ def client_article_show():                                 # remplace client_ind
     prix_totalListe = mycursor.fetchone()
     prix_total=(prix_totalListe['total'])
 
+    mycursor.execute("SELECT * FROM marque")
+    marque_filtre = mycursor.fetchall()
+
+    mycursor.execute("SELECT * FROM telephone")
+    articles = mycursor.fetchall()
+
+    if 'word' in session:
+        mycursor.execute("SELECT * FROM telephone WHERE modele LIKE %s", ("%"+session["word"]+"%"))
+        articles = mycursor.fetchall()
 
 
-    sql = "SELECT * FROM telephone"
-    mycursor.execute(sql)
-    telephone = mycursor.fetchall()
-    articles = telephone
 
     for article in articles:
-        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s",(article['code_marque']))
+        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s", (article['code_marque']))
         marque = mycursor.fetchone()
         article['nom_marque'] = marque.get('nom_marque')
 
+        mycursor.execute("SELECT COUNT(commentaire) as nb FROM commentaire WHERE telephone_id = %s", (article['id_telephone']))
+        nb_notes=mycursor.fetchone()
+        article['nb_notes']=nb_notes.get('nb')
+
+        mycursor.execute("SELECT SUM(note) as moy_note FROM commentaire WHERE telephone_id = %s", (article['id_telephone']))
+        moy=mycursor.fetchone()
+        if(moy.get('moy_note') is not None and moy.get('moy_note') >=0):
+            article['moy_notes']=moy.get('moy_note')/nb_notes.get('nb')
+        else:
+            article['moy_notes']="pas de note pour cette article"
+        article['show'] = True
 
 
-    return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=types_articles)
+    if('code_marque' in session):
+        for article in articles:
+            x=article['code_marque']
+            y=session['code_marque']
+            if(int(y)>0 and int(x)==int(y) and article['show']):
+                article['show'] = True
+            else:
+                article['show'] = False
+
+    if ('prix_min' in session):
+        for article in articles:
+            x = article['prix']
+            y = session['prix_min']
+            if (y is not None and int(x) >= int(y) and article['show']):
+                article['show'] = True
+            else:
+                article['show'] = False
+
+    if ('prix_max' in session):
+        for article in articles:
+            x = article['prix']
+            y = session['prix_max']
+            if (y is not None and int(x) <= int(y) and article['show']):
+                article['show'] = True
+            else:
+                article['show'] = False
+
+
+    return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=marque_filtre)
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):
@@ -60,6 +102,15 @@ def client_article_details(id):
     sql="SELECT * FROM ligneCommande INNER JOIN commande ON commande.idCommande = ligneCommande.commande_id WHERE commande.idUser=%s"
     mycursor.execute(sql, client_id)
     commandes_articles=mycursor.fetchall()
-    commentaires=[]
 
-    return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles)
+    sql="SELECT * FROM commentaire WHERE telephone_id=%s"
+    mycursor.execute(sql, id)
+    commentaires=mycursor.fetchall()
+
+    tuple_commeUser=(id, client_id)
+    sql = "SELECT * FROM commentaire WHERE telephone_id=%s AND user_id = %s"
+    mycursor.execute(sql, tuple_commeUser)
+    commentaires_user = mycursor.fetchall()
+
+
+    return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires, commandes_articles=commandes_articles, commentaires_user=commentaires_user)
