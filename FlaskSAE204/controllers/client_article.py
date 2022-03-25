@@ -49,7 +49,7 @@ def client_article_show():                                 # remplace client_ind
         nb_notes=mycursor.fetchone()
         article['nb_notes']=nb_notes.get('nb')
 
-        mycursor.execute("SELECT SUM(note) as moy_note FROM commentaire WHERE telephone_id = %s", (article['id_telephone']))
+        mycursor.execute("SELECT marque.nom_marque FROM marque WHERE code_marque=%s", (article['code_marque']))
         moy=mycursor.fetchone()
         if(moy.get('moy_note') is not None and moy.get('moy_note') >=0):
             article['moy_notes']=moy.get('moy_note')/nb_notes.get('nb')
@@ -85,8 +85,10 @@ def client_article_show():                                 # remplace client_ind
             else:
                 article['show'] = False
 
-
-    return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=marque_filtre)
+    mycursor.execute("SELECT taxe FROM pays INNER JOIN userC ON userC.codePays = pays.codePays AND idUser = %s",client_id)
+    taxePays_ = mycursor.fetchone()
+    taxePays_ = float(taxePays_.get('taxe'))
+    return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=marque_filtre,taxePays=taxePays_)
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):

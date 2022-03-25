@@ -56,7 +56,6 @@
                             </td>
                         </tr>
                     {% endfor %}
-
                 </table>
                     <form action="/client/panier/vider" style="display: inline-block;"  method="post" >
                         <button class="btn btn-primary"  > Éffacer tout </button>
@@ -65,7 +64,8 @@
                         <button class="btn btn-primary" > Passer ma commande </button>
                     </form>
                     {% if prix_total %}
-                        Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
+                        Total à payer : <strong>{{ "{:,.2f} €".format(prix_total+taxePays) }}</strong>
+                        <br> Taxe: {{ taxePays }}
                     {% endif %}
                 {% endif %}
             </div>

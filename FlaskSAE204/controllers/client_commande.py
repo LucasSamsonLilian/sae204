@@ -65,6 +65,12 @@ def client_commande_show():
     sql = '''SELECT * FROM commande WHERE idUser = %s'''
     mycursor.execute(sql,client_id)
     commandes = mycursor.fetchall()
+
+    mycursor.execute("SELECT taxe FROM pays INNER JOIN userC ON userC.codePays = pays.codePays AND idUser = %s",
+                     client_id)
+    taxePays_ = mycursor.fetchone()
+    taxePays_ = float(taxePays_.get('taxe'))
+
     for commande in commandes:
         tuple_select = (commande['idCommande'])
         sql = '''SELECT SUM(quantite) AS nbr FROM ligneCommande WHERE commande_id = %s '''
@@ -75,7 +81,7 @@ def client_commande_show():
         sql = '''SELECT SUM(quantite*prix) AS prix FROM ligneCommande WHERE commande_id = %s '''
         mycursor.execute(sql, tuple_select)
         retour = mycursor.fetchone()
-        commande['prix_total'] = retour.get("prix")
+        commande['prix_total'] = float(retour.get("prix")) + taxePays_
 
         tuple_select = (commande['idEtat'])
         sql = '''SELECT libelle FROM etat WHERE idEtat = %s'''
@@ -106,7 +112,6 @@ def client_commande_show():
         mycursor.execute(sql, tuple_select)
         retour = mycursor.fetchone()
         acommande['prix_total'] = retour.get("prixtot")
-
 
     return render_template('client/commandes/show.html', commandes=commandes,articles_commande=articles_commande )
 #

@@ -77,9 +77,19 @@ CREATE TABLE IF NOT EXISTS pays(
     PRIMARY KEY (codePays)
 );
 
-INSERT INTO pays VALUES (null,'France',2.0),
-                        (null,'Allemagne',3.5),
-                        (null,'Angleterre',8.0);
+INSERT INTO pays VALUES (null,'France',20.0),
+                        (null,'Allemagne',30.5),
+                        (null,'Angleterre',80.0),
+                        (null,'Espagne',30.5),
+                        (null,'Ukraine',0.0),
+                        (null,'Irlande',40.0),
+                        (null,'Corée du Nord',350.0),
+                        (null,'Ecosse',30.2),
+                        (null,'Italie',20.3),
+                        (null,'Croatie',40.2),
+                        (null,'Suisse',200.0),
+                        (null,'Portugal',30.1),
+                        (null,'Belgique',20.6);
 
 SELECT * FROM pays;
 

@@ -24,7 +24,13 @@
     <label for="_password">Mot de passe</label>
     <input type="password" name="password" class="form-control" value="" required  placeholder="Password">
 
-
+    D'où venez vous?<br/>
+        <select name="Pays" required>
+            <option></option>
+            {% for pays in pays_ %}
+                <option value="{{ pays.codePays }}">{{ pays.libelle }}</option>
+            {% endfor %}
+        </select><br>
 
     <button class="btn btn-lg btn-primary mt-4" type="submit">
         Valider l'inscription (Sign Up)

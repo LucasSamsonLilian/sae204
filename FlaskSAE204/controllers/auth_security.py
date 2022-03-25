@@ -44,7 +44,12 @@ def auth_login_post():
 
 @auth_security.route('/signup')
 def auth_signup():
-    return render_template('auth/signup.html')
+    mycursor = get_db().cursor()
+    sql = '''SELECT * FROM pays'''
+    mycursor.execute(sql)
+    pays_ = mycursor.fetchall()
+
+    return render_template('auth/signup.html', pays_=pays_)
 
 
 @auth_security.route('/signup', methods=['POST'])
@@ -53,6 +58,7 @@ def auth_signup_post():
     email = request.form.get('email')
     username = request.form.get('username')
     password = request.form.get('password')
+    pays = request.form.get('pays')
     tuple_select = (username, email)
     sql = '''SELECT * FROM userC WHERE email = %s OR username = %s'''
     retour = mycursor.execute(sql, tuple_select)
@@ -63,8 +69,8 @@ def auth_signup_post():
 
     # ajouter un nouveau user
     password = generate_password_hash(password, method='sha256')
-    tuple_insert = (username, email, password, 'ROLE_client')
-    sql = '''INSERT INTO userC(username,email,password,role) VALUES (%s,%s,%s,%s)'''
+    tuple_insert = (username, email, password, 'ROLE_client',pays)
+    sql = '''INSERT INTO userC(username,email,password,role,codePays) VALUES (%s,%s,%s,%s,%s)'''
     mycursor.execute(sql, tuple_insert)
     get_db().commit()                    # position de cette ligne discutatble !
     sql='''SELECT last_insert_id() AS last_insert_id;'''
@@ -75,9 +81,11 @@ def auth_signup_post():
     session.pop('username', None)
     session.pop('role', None)
     session.pop('user_id', None)
+    session.pop('codePays',None)
     session['username'] = username
     session['role'] = 'ROLE_client'
     session['user_id'] = user_id
+    session['codePays'] = pays
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
